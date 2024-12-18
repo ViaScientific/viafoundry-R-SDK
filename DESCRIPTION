@@ -5,8 +5,17 @@ Version: 1.0.0
 Language: en-US
 Author: Alper Kucukural <alper@viascientific.com>
 Maintainer: Alper Kucukural <alper@viascientific.com>
+Authors@R:
+    c(person(given = "Alper",
+             family = "Kucukural",
+             role = c("aut", "cre"),
+             email = "alper@viascientific.com"),
+      person(family = "Via Scientific",
+             role = c("aut", "cph")))
 Description: An R package to interact with the Via Foundry API, including authentication, endpoint discovery, and dynamic API requests.
-License: MIT + file LICENSE
+URL: https://github.com/viascientific/viafoundry-r-sdk
+BugReports: https://github.com/viascientific/viafoundry-r-sdk/issues
+License: MIT
 Encoding: UTF-8
 LazyData: true
 Imports:
