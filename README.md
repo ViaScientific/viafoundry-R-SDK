@@ -115,9 +115,9 @@ The viafoundry package uses a configuration file (~/.viaenv) to store the hostna
 
 This file is automatically created during authentication.
 
-###Troubleshooting
+## Troubleshooting
 
-###Common Issues
+### Common Issues
 
 	1.	Authentication Fails:
 	•	Verify your username, password, and hostname.
