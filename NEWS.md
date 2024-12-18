@@ -1,6 +1,6 @@
 # ViaFoundry R SDK Changelog
 
-## Version 0.1.0 (2024-12-18)
+## Version 1.0.0 (2024-12-18)
 ### Initial Release
 - Added `authenticate()` function for logging into the Via Foundry API and saving authentication details to `~/.viaenv`.
 - Implemented `discover()` function to fetch available API endpoints from Swagger documentation.
