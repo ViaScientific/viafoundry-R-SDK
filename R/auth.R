@@ -12,15 +12,15 @@ config_path <- "~/.viaenv"
 #' Authenticates the user with the Via Foundry API using their username and password.
 #' Stores the hostname and authentication token in a local configuration file.
 #'
-#' @param hostname The API hostname (e.g., "http://local.dolphinnext.com:8081").
+#' @param hostname The API hostname (e.g., "https://your_viafoundry").
 #' @param username The login username.
 #' @param password The login password.
 #' @param identity_type The identity type (default is 1).
-#' @param redirect_uri The redirect URI (default is "http://localhost").
+#' @param redirect_uri The redirect URI (default is "http://your_viafoundry/redirect").
 #' @return None. Saves the authentication token to the configuration file.
 #' @examples
 #' \dontrun{
-#' authenticate("http://local.dolphinnext.com:8081", "admin", "12345678")
+#' authenticate("https://your_viafoundry", "username", "password")
 #' }
 #' @export
 authenticate <- function(hostname, username, password, identity_type = 1, redirect_uri = "http://localhost") {

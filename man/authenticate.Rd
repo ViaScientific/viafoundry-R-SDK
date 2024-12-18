@@ -13,7 +13,7 @@ authenticate(
 )
 }
 \arguments{
-\item{hostname}{The API hostname (e.g., "http://local.dolphinnext.com:8081").}
+\item{hostname}{The API hostname (e.g., "https://your_viafoundry").}
 
 \item{username}{The login username.}
 
@@ -21,7 +21,7 @@ authenticate(
 
 \item{identity_type}{The identity type (default is 1).}
 
-\item{redirect_uri}{The redirect URI (default is "http://localhost").}
+\item{redirect_uri}{The redirect URI (default is "http://your_viafoundry/redirect").}
 }
 \value{
 None. Saves the authentication token to the configuration file.
@@ -32,6 +32,6 @@ Stores the hostname and authentication token in a local configuration file.
 }
 \examples{
 \dontrun{
-authenticate("http://local.dolphinnext.com:8081", "admin", "12345678")
+authenticate("https://your_viafoundry", "username", "password")
 }
 }

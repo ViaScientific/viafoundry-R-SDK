@@ -2,10 +2,11 @@ Package: foundry
 Type: Package
 Title: R Client for Via Foundry API
 Version: 1.0.0
+Language: en-US
 Author: Alper Kucukural <alper@viascientific.com>
 Maintainer: Alper Kucukural <alper@viascientific.com>
 Description: An R package to interact with the Via Foundry API, including authentication, endpoint discovery, and dynamic API requests.
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
