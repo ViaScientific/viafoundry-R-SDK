@@ -4,3 +4,4 @@
 ^\.RData$
 ^\.git$
 ^\.DS_Store$
+cran-comments.md

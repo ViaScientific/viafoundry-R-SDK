@@ -15,11 +15,17 @@
 You can install the package directly from the source using `devtools`:
 
 ```R
+
+# Install the viafoundry package
+devtools::install_github("viafoundry")
+
+# Or
+
 # Install devtools if not already installed
 install.packages("devtools")
 
 # Install the viafoundry package
-devtools::install_github("your-repo/viafoundry")
+devtools::install_github("viascientific/viafoundry-R-SDK")
 ```
 
 ## Getting Started
@@ -32,7 +38,7 @@ Once authentication is done it will put token into ~/.viaenv file, you don't nee
 Use the authenticate() function:
 
 ```R
-library(foundry)
+library(viafoundry)
 
 # Authenticate and save the token
 authenticate(
@@ -49,7 +55,7 @@ authenticate(
 You can list all available API endpoints using the list_endpoints() function:
 
 ```R
-
+library(viafoundry)
 # Fetch and display available endpoints
 endpoints <- discover()
 print(endpoints)
@@ -62,6 +68,7 @@ To interact with a specific API endpoint, use the call_endpoint() function:
 
 
 ```R
+library(viafoundry)
 # Call an API endpoint
 response <- call_endpoint(
     method = "GET",
@@ -78,7 +85,7 @@ print(response)
 ### Example workflow
 
 ```R
-library(foundry)
+library(viafoundry)
 
 # Step 1: Authenticate
 authenticate(
@@ -108,7 +115,7 @@ The viafoundry package uses a configuration file (~/.viaenv) to store the hostna
 ```R
 
 {
-    "hostname": "http://local.dolphinnext.com:8081",
+    "hostname": "http://localhost",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```

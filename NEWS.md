@@ -21,4 +21,4 @@
 ### New Features
 - Add support for uploading files to the API.
 - Introduce a caching mechanism for Swagger documentation.
-- Provide a CLI wrapper for the package via the `viafoundry` binary.
+- Provide a CLI wrapper for the package via the `foundry` binary, which can be installed with pip install viafoundry-SDK.
