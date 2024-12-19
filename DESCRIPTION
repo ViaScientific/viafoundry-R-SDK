@@ -15,7 +15,7 @@ Authors@R:
 Description: An R package to interact with the Via Foundry API, including authentication, endpoint discovery, and dynamic API requests.
 URL: https://github.com/viascientific/viafoundry-r-sdk
 BugReports: https://github.com/viascientific/viafoundry-r-sdk/issues
-License: MIT
+License: file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
