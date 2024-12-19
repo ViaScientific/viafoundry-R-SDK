@@ -11,7 +11,6 @@ There were no ERRORs, WARNINGs, or NOTEs.
 This is the initial submission of the `foundry` package to CRAN, so there are no reverse dependencies.
 
 ## Notes
-* This package uses the MIT license, and the LICENSE file has been included and referenced in the DESCRIPTION file as `License: MIT + file LICENSE`.
 * All examples in the package are wrapped with `\dontrun{}` as they require authentication and a working API server.
 
 ## Resubmission Notes (if applicable)
