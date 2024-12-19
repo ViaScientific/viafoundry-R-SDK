@@ -1,10 +1,8 @@
 Package: viafoundry
 Type: Package
-Title: R Client for Via Foundry API
+Title: R Client for ViaFoundry API
 Version: 1.0.0
 Language: en-US
-Author: Alper Kucukural <alper@viascientific.com>
-Maintainer: Alper Kucukural <alper@viascientific.com>
 Authors@R:
     c(person(given = "Alper",
              family = "Kucukural",
@@ -13,7 +11,7 @@ Authors@R:
       person(family = "Via Scientific",
              role = c("aut", "cph")))
 Description: An R package to interact with the Via Foundry API, including authentication, endpoint discovery, and dynamic API requests.
-License: file LICENSE
+License: Apache License 2.0
 Encoding: UTF-8
 LazyData: true
 Imports:
