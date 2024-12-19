@@ -1,6 +1,6 @@
 Package: viafoundry
 Type: Package
-Title: R Client for via foundry API
+Title: R Client for via Foundry API
 Version: 1.0.0
 Language: en-US
 Authors@R:
