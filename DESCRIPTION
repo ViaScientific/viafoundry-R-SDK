@@ -13,8 +13,6 @@ Authors@R:
       person(family = "Via Scientific",
              role = c("aut", "cph")))
 Description: An R package to interact with the Via Foundry API, including authentication, endpoint discovery, and dynamic API requests.
-URL: https://github.com/viascientific/viafoundry-r-sdk
-BugReports: https://github.com/viascientific/viafoundry-r-sdk/issues
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
