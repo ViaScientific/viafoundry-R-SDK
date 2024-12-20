@@ -23,7 +23,7 @@ config_path <- "~/.viaenv"
 #' authenticate("https://your_viafoundry", "username", "password")
 #' }
 #' @export
-authenticate <- function(hostname, username, password, identity_type = 1, redirect_uri = "http://localhost") {
+authenticate <- function(hostname, username = NULL, password, identity_type = 1, redirect_uri = "http://localhost") {
   
   # Check if the config file exists
   if (file.exists(config_path)) {
@@ -51,7 +51,7 @@ authenticate <- function(hostname, username, password, identity_type = 1, redire
     redirectUri = redirect_uri
   )
   print( toJSON(body, auto_unbox = TRUE) )
-  response <- POST(url, body = toJSON(body, auto_unbox = TRUE), encode = "json")
+  response <- POST(url, body = body, encode = "json")
   
   if (status_code(response) != 200) {
     stop("Authentication failed: ", content(response, "text"))

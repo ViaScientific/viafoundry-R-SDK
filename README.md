@@ -17,7 +17,7 @@ You can install the package directly from the source using `devtools`:
 ```R
 
 # Install the viafoundry package
-devtools::install_github("viafoundry")
+install.packages("viafoundry")
 
 # Or
 
@@ -44,10 +44,26 @@ library(viafoundry)
 authenticate(
     hostname = "https://your_foundry_server",
     username = "username",
-    password = "password",
-    identity_type = 1,          # Default is 1
-    redirect_uri = "http://your_foundry_server/redirect"
+    password = "password"
 )
+```
+or use authenticate() function it will ask the informtion needed for authentication
+
+```R
+library(viafoundry)
+authenticate()
+```
+
+### Configuration File
+The viafoundry package uses a configuration file (~/.viaenv) to store the hostname and token. Example:
+
+```R
+
+{
+    "hostname": "http://localhost",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+
 ```
 
 ### Listing Available Endpoints
@@ -85,39 +101,73 @@ print(response)
 ### Example workflow
 
 ```R
+
 library(viafoundry)
 
 # Step 1: Authenticate
-authenticate(
-    hostname = "http://your_viafoundry",
-    username = "username",
-    password = "password"
-)
+authenticate()
 
 # Step 2: List all available endpoints
-endpoints <- list_endpoints()
+endpoints <- discover()
 print("Available endpoints:")
 print(endpoints)
 
 # Step 3: Call a specific endpoint
 response <- call_endpoint(
     method = "GET",
-    endpoint = "/api/projects"
+    endpoint = "/api/v1/process"
 )
 print("API response:")
 print(response)
+
+
 ```
 
+### Accesing the reports and load files
 
-### Configuration File
-The viafoundry package uses a configuration file (~/.viaenv) to store the hostname and token. Example:
-
+You can access any files in the report section using SDK
 ```R
 
-{
-    "hostname": "http://localhost",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-}
+library(viafoundry)
+#get report id from Via Foundry
+
+reportID <- 1 
+
+# Fetch the report 
+report <- fetchReportData(reportID)
+
+# Get all processes belong to the report
+getProcessNames(report)
+
+# Select the file from a process or a module 
+getFileNames(report, "RSEM_module")
+
+# Load a specific file
+rsem_data <- loadFile(report, "RSEM_module", "genes_expression_expected_count.tsv")
+head(rsem_data)
+
+```
+You can access any files in the report section using SDK
+```R
+
+library(viafoundry)
+#get report id from Via Foundry
+
+reportID <- 1 
+
+# Fetch the report 
+report <- fetchReportData(reportID)
+
+getAllFileNames(report)
+
+# Choose a file from the list, if the extension is not tsv, csv, or txt, the file will be downloaded. you can define download directory
+
+loadFile(report, "DE_module_RSEM", "control_vs_exper_des.Rmd")
+
+# or 
+
+loadFile(report, "DE_module_RSEM", "control_vs_exper_des.Rmd", download_dir="/your/directory")
+
 ```
 
 This file is automatically created during authentication.
@@ -127,10 +177,11 @@ This file is automatically created during authentication.
 ### Common Issues
 
 	1.	Authentication Fails:
-	•	Verify your username, password, and hostname.
-	•	Check if the token in the ~/.viaenv file is expired.
+   	-	Verify your username, password, and hostname.
+	  -	Check if the token in the ~/.viaenv file is expired.
 	2.	API Call Fails:
-	•	Ensure the endpoint exists and you have the necessary permissions.
-	•	Check the API documentation for the correct method and parameters.
+  	-	Ensure the endpoint exists and you have the necessary permissions.
+  	-	Check the API documentation for the correct method and parameters.
 	3.	Server Returns HTML Instead of JSON:
-	•	Ensure the Accept: application/json header is sent with requests. This is handled automatically by the package.
+  	-	Ensure the Accept: application/json header is sent with requests. This is handled automatically by the package.
+  4. If you want to re-authenticate remove the viaenv file (e.g ~/.viaenv) 

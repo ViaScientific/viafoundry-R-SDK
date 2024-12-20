@@ -6,7 +6,7 @@
 \usage{
 authenticate(
   hostname,
-  username,
+  username = NULL,
   password,
   identity_type = 1,
   redirect_uri = "http://localhost"
