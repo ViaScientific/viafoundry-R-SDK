@@ -15,5 +15,6 @@ This is the initial submission of the `foundry` package to CRAN, so there are no
 
 ## Resubmission Notes (if applicable)
 * This is a resubmission. In this version:
+  - Description and Title changed
   - Addressed spelling errors in documentation.
   - Improved error handling for expired tokens in the `authenticate()` function.
