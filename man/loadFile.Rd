@@ -7,7 +7,7 @@
 loadFile(json_data, processName, fileName, sep = "\\t", download_dir = getwd())
 }
 \arguments{
-\item{json_data}{The JSON object containing the report data.}
+\item{json_data}{The `JSON` object containing the report data.}
 
 \item{processName}{The name of the process.}
 

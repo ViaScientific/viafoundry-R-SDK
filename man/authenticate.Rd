@@ -2,7 +2,7 @@
 % Please edit documentation in R/auth.R
 \name{authenticate}
 \alias{authenticate}
-\title{Authenticate with the Via Foundry API}
+\title{Authenticate with the `Via Foundry` API}
 \usage{
 authenticate(
   hostname,
@@ -13,7 +13,7 @@ authenticate(
 )
 }
 \arguments{
-\item{hostname}{The API hostname (e.g., "https://your_viafoundry").}
+\item{hostname}{The API `hostname` (e.g., `https://your_viafoundry`).}
 
 \item{username}{The login username.}
 
@@ -21,13 +21,13 @@ authenticate(
 
 \item{identity_type}{The identity type (default is 1).}
 
-\item{redirect_uri}{The redirect URI (default is "http://your_viafoundry/redirect").}
+\item{redirect_uri}{The redirect `URI` (default is `http://your_viafoundry/redirect`).}
 }
 \value{
 None. Saves the authentication token to the configuration file.
 }
 \description{
-Authenticates the user with the Via Foundry API using their username and password.
+Authenticates the user with the `Via Foundry` API using their username and password.
 Stores the hostname and authentication token in a local configuration file.
 }
 \examples{

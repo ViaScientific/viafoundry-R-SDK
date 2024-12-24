@@ -7,10 +7,10 @@
 getAllFileNames(json_data)
 }
 \arguments{
-\item{json_data}{The JSON object containing the report data.}
+\item{json_data}{The `JSON` object containing the report data.}
 }
 \value{
-A data frame containing id, processName, name, extension, fileSize, and routePath.
+A data frame containing `id`, `processName`, `name`, `extension`, `fileSize`, and `routePath`.
 }
 \description{
 Extract children names across all processes

@@ -7,12 +7,12 @@
 getFileNames(json_data, processName)
 }
 \arguments{
-\item{json_data}{The JSON object containing the report data.}
+\item{json_data}{The `JSON` object containing the report data.}
 
 \item{processName}{The name of the process to filter by.}
 }
 \value{
-A data frame containing id, name, extension, and processName.
+A data frame containing `id`, `name`, `extension`, and `processName`.
 }
 \description{
 Get file names for a specific process

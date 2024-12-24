@@ -9,11 +9,11 @@ call_endpoint(method, endpoint, params = list(), data = NULL)
 \arguments{
 \item{method}{The HTTP method (e.g., "GET", "POST", "PUT", "DELETE").}
 
-\item{endpoint}{The API endpoint (e.g., "/api/projects").}
+\item{endpoint}{The API endpoint (e.g., `/api/projects`).}
 
 \item{params}{A named list of query parameters (optional).}
 
-\item{data}{A named list or JSON object to include in the request body (optional).}
+\item{data}{A named list or `JSON` object to include in the request body (optional).}
 }
 \value{
 A list containing the API response.

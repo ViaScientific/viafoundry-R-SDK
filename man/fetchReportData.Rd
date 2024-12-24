@@ -2,7 +2,7 @@
 % Please edit documentation in R/reports.R
 \name{fetchReportData}
 \alias{fetchReportData}
-\title{Fetch the JSON data for a report}
+\title{Fetch the `JSON` data for a report}
 \usage{
 fetchReportData(reportID)
 }
@@ -10,8 +10,8 @@ fetchReportData(reportID)
 \item{reportID}{The ID of the report to fetch data for.}
 }
 \value{
-The JSON object containing the report data.
+The `JSON` object containing the report data.
 }
 \description{
-Fetch the JSON data for a report
+Fetch the `JSON` data for a report
 }

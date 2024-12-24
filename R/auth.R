@@ -7,16 +7,16 @@ library(jsonlite)
 config_path <- "~/.viaenv"
 
 # Authenticate and save the token
-#' Authenticate with the Via Foundry API
+#' Authenticate with the `Via Foundry` API
 #'
-#' Authenticates the user with the Via Foundry API using their username and password.
+#' Authenticates the user with the `Via Foundry` API using their username and password.
 #' Stores the hostname and authentication token in a local configuration file.
 #'
-#' @param hostname The API hostname (e.g., "https://your_viafoundry").
+#' @param hostname The API `hostname` (e.g., `https://your_viafoundry`).
 #' @param username The login username.
 #' @param password The login password.
 #' @param identity_type The identity type (default is 1).
-#' @param redirect_uri The redirect URI (default is "http://your_viafoundry/redirect").
+#' @param redirect_uri The redirect `URI` (default is `http://your_viafoundry/redirect`).
 #' @return None. Saves the authentication token to the configuration file.
 #' @examples
 #' \dontrun{

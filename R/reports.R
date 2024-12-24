@@ -4,10 +4,10 @@ library(httr)
 library(dplyr)
 
 
-#' Fetch the JSON data for a report
+#' Fetch the `JSON` data for a report
 #'
 #' @param reportID The ID of the report to fetch data for.
-#' @return The JSON object containing the report data.
+#' @return The `JSON` object containing the report data.
 #' @export
 fetchReportData <- function(reportID) {
   # Fetch data from the API
@@ -20,7 +20,7 @@ fetchReportData <- function(reportID) {
 
 #' Get unique process names
 #'
-#' @param json_data The JSON object containing the report data.
+#' @param json_data The `JSON` object containing the report data.
 #' @return A character vector of unique process names.
 #' @export
 getProcessNames <- function(json_data) {
@@ -33,15 +33,15 @@ getProcessNames <- function(json_data) {
 
 #' Get file names for a specific process
 #'
-#' @param json_data The JSON object containing the report data.
+#' @param json_data The `JSON` object containing the report data.
 #' @param processName The name of the process to filter by.
-#' @return A data frame containing id, name, extension, and processName.
+#' @return A data frame containing `id`, `name`, `extension`, and `processName`.
 #' @importFrom dplyr %>% filter
 #' @importFrom purrr map_dfr
 #' @importFrom utils read.table
 #' @export
-getFileNames <- function(json_data, processName) {
-  # Filter the data to the specified processName
+getFileNames <- function( json_data, processName ) {
+  # Filter the data to the specified `processName`
   process_data <- json_data$data[json_data$data$processName == processName, ]
   
   # Extract the children associated with the process
@@ -59,7 +59,7 @@ utils::globalVariables(c("id", "name", "extension", "fileSize", "routePath"))
 
 #' Load or download a file from a process and file name
 #'
-#' @param json_data The JSON object containing the report data.
+#' @param json_data The `JSON` object containing the report data.
 #' @param processName The name of the process.
 #' @param fileName The name of the file to load or download.
 #' @param sep The separator for tabular files. Default is tab-separated.
@@ -109,8 +109,8 @@ loadFile <- function(json_data, processName, fileName, sep = "\t", download_dir 
 
 #' Extract children names across all processes
 #'
-#' @param json_data The JSON object containing the report data.
-#' @return A data frame containing id, processName, name, extension, fileSize, and routePath.
+#' @param json_data The `JSON` object containing the report data.
+#' @return A data frame containing `id`, `processName`, `name`, `extension`, `fileSize`, and `routePath`.
 #' @importFrom dplyr select
 #' @importFrom purrr map_dfr
 #' @export

@@ -1,4 +1,4 @@
-# ViaFoundry R SDK
+# `Via Foundry R SDK`
 
 `viafoundry` is an R package for interacting with the Via Foundry API. It provides functions for user authentication, dynamic endpoint discovery, and executing API calls.
 
@@ -33,7 +33,7 @@ devtools::install_github("viascientific/viafoundry-R-SDK")
 ### Authentication
 
 Before interacting with the API, you need to authenticate and store your credentials. 
-Once authentication is done it will put token into ~/.viaenv file, you don't need to re-authenticate.
+Once authentication is done it will put token into `~/.viaenv` file, you don't need to re-authenticate.
 
 Use the authenticate() function:
 
@@ -47,7 +47,7 @@ authenticate(
     password = "password"
 )
 ```
-or use authenticate() function it will ask the informtion needed for authentication
+or use authenticate() function it will ask the information needed for authentication
 
 ```R
 library(viafoundry)
@@ -55,7 +55,7 @@ authenticate()
 ```
 
 ### Configuration File
-The viafoundry package uses a configuration file (~/.viaenv) to store the hostname and token. Example:
+The viafoundry package uses a configuration file `(~/.viaenv)` to store the `hostname` and token. Example:
 
 ```R
 
@@ -123,9 +123,9 @@ print(response)
 
 ```
 
-### Accesing the reports and load files
+### Accessing the reports and load files
 
-You can access any files in the report section using SDK
+You can access any files in the report section using `SDK`
 ```R
 
 library(viafoundry)
@@ -147,7 +147,7 @@ rsem_data <- loadFile(report, "RSEM_module", "genes_expression_expected_count.ts
 head(rsem_data)
 
 ```
-You can access any files in the report section using SDK
+You can access any files in the report section using `SDK`
 ```R
 
 library(viafoundry)
@@ -177,11 +177,11 @@ This file is automatically created during authentication.
 ### Common Issues
 
 	1.	Authentication Fails:
-   	-	Verify your username, password, and hostname.
-	  -	Check if the token in the ~/.viaenv file is expired.
+   	-	Verify your `username`, `password`, and `hostname`.
+	  -	Check if the token in the `~/.viaenv` file is expired.
 	2.	API Call Fails:
   	-	Ensure the endpoint exists and you have the necessary permissions.
   	-	Check the API documentation for the correct method and parameters.
 	3.	Server Returns HTML Instead of JSON:
   	-	Ensure the Accept: application/json header is sent with requests. This is handled automatically by the package.
-  4. If you want to re-authenticate remove the viaenv file (e.g ~/.viaenv) 
+  4. If you want to re-authenticate remove the `viaenv` file (e.g `~/.viaenv`) 

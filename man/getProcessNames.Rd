@@ -7,7 +7,7 @@
 getProcessNames(json_data)
 }
 \arguments{
-\item{json_data}{The JSON object containing the report data.}
+\item{json_data}{The `JSON` object containing the report data.}
 }
 \value{
 A character vector of unique process names.

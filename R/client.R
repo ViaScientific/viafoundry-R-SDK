@@ -48,9 +48,9 @@ discover <- function() {
 #' Sends an HTTP request to a specified API endpoint using the stored token for authentication.
 #'
 #' @param method The HTTP method (e.g., "GET", "POST", "PUT", "DELETE").
-#' @param endpoint The API endpoint (e.g., "/api/projects").
+#' @param endpoint The API endpoint (e.g., `/api/projects`).
 #' @param params A named list of query parameters (optional).
-#' @param data A named list or JSON object to include in the request body (optional).
+#' @param data A named list or `JSON` object to include in the request body (optional).
 #' @return A list containing the API response.
 #' @examples
 #' \dontrun{
