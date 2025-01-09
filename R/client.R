@@ -34,7 +34,7 @@ load_config <- function() {
 #' @export
 discover <- function() {
   config <- load_config()
-  url <- paste0(config$hostname, "/api-docs/swagger.json?group=App")
+  url <- paste0(config$hostname, "/swagger.json")
   
   headers <- add_headers(Authorization = paste("Bearer", config$bearer_token))
   response <- GET(url, headers)

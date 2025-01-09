@@ -74,6 +74,7 @@ authenticate <- function(hostname, username = NULL, password = NULL, identity_ty
 #' @param redirect_uri The redirect URI.
 #' @return The cookie token.
 #' @importFrom httr POST content headers
+#' @export
 login <- function(hostname, username, password, identity_type = 1, redirect_uri = "http://localhost") {
   url <- paste0(hostname, "/api/auth/v1/login")
   body <- list(
@@ -110,6 +111,7 @@ login <- function(hostname, username, password, identity_type = 1, redirect_uri 
 #' @param name The name of the token (default is "token").
 #' @return The bearer token.
 #' @importFrom httr POST add_headers content
+#' @export
 get_bearer_token <- function(hostname, cookie_token, name = "token") {
   url <- paste0(hostname, "/api/auth/v1/personal-access-token")
   headers <- add_headers(Cookie = paste0("viafoundry-cookie=", cookie_token))
