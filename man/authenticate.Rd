@@ -7,9 +7,10 @@
 authenticate(
   hostname,
   username = NULL,
-  password,
+  password = NULL,
   identity_type = 1,
-  redirect_uri = "http://localhost"
+  redirect_uri = "http://localhost",
+  config_path = DEFAULT_CONFIG_PATH
 )
 }
 \arguments{
@@ -17,21 +18,23 @@ authenticate(
 
 \item{username}{The login username.}
 
-\item{password}{The login password.}
+\item{password}{The login password (optional; will prompt if not provided).}
 
 \item{identity_type}{The identity type (default is 1).}
 
 \item{redirect_uri}{The redirect `URI` (default is `http://your_viafoundry/redirect`).}
+
+\item{config_path}{Path to save the configuration file (default is `~/.viaenv`).}
 }
 \value{
-None. Saves the authentication token to the configuration file.
+None. Saves the bearer token to the configuration file.
 }
 \description{
 Authenticates the user with the `Via Foundry` API using their username and password.
-Stores the hostname and authentication token in a local configuration file.
+Retrieves a bearer token and saves it along with the hostname to a configuration file.
 }
 \examples{
 \dontrun{
-authenticate("https://your_viafoundry", "username", "password")
+authenticate("https://your_viafoundry", "username", config_path = "~/custom_path/.viaenv")
 }
 }

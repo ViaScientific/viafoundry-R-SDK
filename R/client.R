@@ -1,20 +1,25 @@
-# Load configuration
-load_config <- function() {
-  config<-c()
+#' Load Configuration
+#'
+#' Loads the configuration file or triggers authentication if the file is missing.
+#' 
+#' @return A list containing the hostname and bearer token.
+#' @importFrom jsonlite fromJSON
+load_config <- function(config_path = DEFAULT_CONFIG_PATH) {
+  config_path <- normalizePath(config_path, mustWork = FALSE)
+  
   if (!file.exists(config_path)) {
-    config <- authenticate()
-  }else{
-    config <- fromJSON(config_path)
+    message("Configuration file not found. Initiating authentication...")
+    authenticate(config_path = config_path)  # Trigger authentication if missing
   }
   
+  config <- fromJSON(config_path)
   
-  if (is.null(config$hostname) || is.null(config$token)) {
+  if (is.null(config$hostname) || is.null(config$bearer_token)) {
     stop("Invalid configuration. Please authenticate again.")
   }
+  
   return(config)
 }
-
-# Discover endpoints from Swagger
 #' List Available Endpoints
 #'
 #' Fetches and lists all available API endpoints from the Swagger documentation.
@@ -24,14 +29,18 @@ load_config <- function() {
 #' \dontrun{
 #' discover()
 #' }
+#' @importFrom httr GET add_headers status_code content
+#' @importFrom jsonlite fromJSON
 #' @export
 discover <- function() {
   config <- load_config()
   url <- paste0(config$hostname, "/api-docs/swagger.json?group=App")
-  response <- GET(url, add_headers(Cookie = paste0("viafoundry-cookie=", config$token)))
+  
+  headers <- add_headers(Authorization = paste("Bearer", config$bearer_token))
+  response <- GET(url, headers)
   
   if (status_code(response) != 200) {
-    stop("Failed to retrieve endpoints: ", content(response, "text"))
+    stop("Failed to retrieve endpoints: ", content(response, "text", encoding = "UTF-8"))
   }
   
   swagger <- fromJSON(content(response, "text", encoding = "UTF-8"))
@@ -42,10 +51,9 @@ discover <- function() {
   return(names(swagger$paths))
 }
 
-# Call a specific API endpoint
 #' Call an API Endpoint
 #'
-#' Sends an HTTP request to a specified API endpoint using the stored token for authentication.
+#' Sends an HTTP request to a specified API endpoint using the stored bearer token for authentication.
 #'
 #' @param method The HTTP method (e.g., "GET", "POST", "PUT", "DELETE").
 #' @param endpoint The API endpoint (e.g., `/api/projects`).
@@ -57,16 +65,19 @@ discover <- function() {
 #' response <- call_endpoint("GET", "/api/projects")
 #' print(response)
 #' }
+#' @importFrom httr GET POST PUT DELETE add_headers status_code content
+#' @importFrom jsonlite fromJSON
 #' @export
 call_endpoint <- function(method, endpoint, params = list(), data = NULL) {
   config <- load_config()
   url <- paste0(config$hostname, endpoint)
-  headers <- add_headers(Cookie = paste0("viafoundry-cookie=", config$token))
+  headers <- add_headers(Authorization = paste("Bearer", config$bearer_token))
   
   if (!method %in% c("GET", "POST", "PUT", "DELETE")) {
     stop("Invalid HTTP method: ", method)
   }
   
+  # Handle API requests based on method
   response <- switch(
     method,
     GET = GET(url, headers, query = params),
@@ -76,7 +87,7 @@ call_endpoint <- function(method, endpoint, params = list(), data = NULL) {
   )
   
   if (status_code(response) != 200) {
-    stop("API request failed: ", content(response, "text"))
+    stop("API request failed: ", content(response, "text", encoding = "UTF-8"))
   }
   
   return(fromJSON(content(response, "text", encoding = "UTF-8")))

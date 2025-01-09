@@ -19,7 +19,7 @@ call_endpoint(method, endpoint, params = list(), data = NULL)
 A list containing the API response.
 }
 \description{
-Sends an HTTP request to a specified API endpoint using the stored token for authentication.
+Sends an HTTP request to a specified API endpoint using the stored bearer token for authentication.
 }
 \examples{
 \dontrun{
