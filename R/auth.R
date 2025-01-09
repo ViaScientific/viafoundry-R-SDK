@@ -1,6 +1,10 @@
 # Define the default configuration file path
 DEFAULT_CONFIG_PATH <- "~/.viaenv"
 
+# Create a global environment to store the configuration path
+.viaenv <- new.env()
+.viaenv$config_path <- DEFAULT_CONFIG_PATH
+
 #' Authenticate with the `Via Foundry` API
 #'
 #' Authenticates the user with the `Via Foundry` API using their username and password.
@@ -12,7 +16,7 @@ DEFAULT_CONFIG_PATH <- "~/.viaenv"
 #' @param identity_type The identity type (default is 1).
 #' @param redirect_uri The redirect `URI` (default is `http://your_viafoundry/redirect`).
 #' @param config_path Path to save the configuration file (default is `~/.viaenv`).
-#' @return None. Saves the bearer token to the configuration file.
+#' @return None. Saves the bearer token to the configuration file and sets the global config path.
 #' @examples
 #' \dontrun{
 #' authenticate("https://your_viafoundry", "username", config_path = "~/custom_path/.viaenv")
@@ -22,15 +26,14 @@ DEFAULT_CONFIG_PATH <- "~/.viaenv"
 #' @importFrom askpass askpass
 #' @export
 authenticate <- function(hostname, username = NULL, password = NULL, identity_type = 1, redirect_uri = "http://localhost", config_path = DEFAULT_CONFIG_PATH) {
-  
-  # Normalize the config path
-  config_path <- normalizePath(config_path, mustWork = FALSE)
+  # Set the global config path in the environment
+  .viaenv$config_path <- normalizePath(config_path, mustWork = FALSE)
   
   # Load existing configuration if available
-  if (file.exists(config_path)) {
-    config <- fromJSON(config_path)
+  if (file.exists(.viaenv$config_path)) {
+    config <- fromJSON(.viaenv$config_path)
     if (!is.null(config$hostname) && !is.null(config$bearer_token)) {
-      message("Using existing configuration from ", config_path)
+      message("Using existing configuration from ", .viaenv$config_path)
       return(config)
     } else {
       message("Configuration file is invalid or incomplete. Re-authenticating...")
@@ -49,17 +52,17 @@ authenticate <- function(hostname, username = NULL, password = NULL, identity_ty
   
   # Step 1: Retrieve the cookie token
   cookie_token <- login(hostname, username, password, identity_type, redirect_uri)
-  print(cookie_token)
+  
   # Step 2: Retrieve the bearer token using the cookie token
   bearer_token <- get_bearer_token(hostname, cookie_token)
-  print(bearer_token)
+  
   # Save the configuration to the file
   config <- list(
     hostname = hostname,
     bearer_token = bearer_token
   )
-  write(toJSON(config, pretty = TRUE, auto_unbox = TRUE), file = config_path)
-  message("Authentication successful. Bearer token saved to ", config_path)
+  write(toJSON(config, pretty = TRUE, auto_unbox = TRUE), file = .viaenv$config_path)
+  message("Authentication successful. Bearer token saved to ", .viaenv$config_path)
 }
 
 #' Login and retrieve the cookie token
@@ -80,8 +83,8 @@ login <- function(hostname, username, password, identity_type = 1, redirect_uri 
     redirectUri = redirect_uri
   )
   
-  print( toJSON(body, auto_unbox = TRUE) )
   response <- POST(url, body = body, encode = "json")
+
   if (status_code(response) != 200) {
     stop("Login failed: ", content(response, "text", encoding = "UTF-8"))
   }
@@ -115,7 +118,6 @@ get_bearer_token <- function(hostname, cookie_token, name = "token") {
     expiresAt = calculate_expiration_date()
   )
   
-  print( toJSON(body, auto_unbox = TRUE) )
   response <- POST(url, headers, body = body, encode = "json")
   
   if (status_code(response) != 200) {
@@ -140,12 +142,10 @@ calculate_expiration_date <- function() {
 
 #' Get headers for API requests
 #'
-#' @param config_path The path to the configuration file (default is `~/.Rviaenv`).
 #' @return A list of headers with the bearer token.
 #' @importFrom httr add_headers
-get_headers <- function(config_path = DEFAULT_CONFIG_PATH) {
-  config_path <- normalizePath(config_path, mustWork = FALSE)
-  config <- fromJSON(config_path)
+get_headers <- function() {
+  config <- fromJSON(.viaenv$config_path)
   if (is.null(config$bearer_token)) {
     stop("Bearer token is missing. Please authenticate first.")
   }

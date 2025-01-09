@@ -4,10 +4,7 @@
 \alias{get_headers}
 \title{Get headers for API requests}
 \usage{
-get_headers(config_path = DEFAULT_CONFIG_PATH)
-}
-\arguments{
-\item{config_path}{The path to the configuration file (default is `~/.Rviaenv`).}
+get_headers()
 }
 \value{
 A list of headers with the bearer token.

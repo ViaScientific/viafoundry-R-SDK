@@ -27,7 +27,7 @@ authenticate(
 \item{config_path}{Path to save the configuration file (default is `~/.viaenv`).}
 }
 \value{
-None. Saves the bearer token to the configuration file.
+None. Saves the bearer token to the configuration file and sets the global config path.
 }
 \description{
 Authenticates the user with the `Via Foundry` API using their username and password.

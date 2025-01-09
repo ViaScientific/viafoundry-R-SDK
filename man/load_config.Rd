@@ -4,7 +4,7 @@
 \alias{load_config}
 \title{Load Configuration}
 \usage{
-load_config(config_path = DEFAULT_CONFIG_PATH)
+load_config()
 }
 \value{
 A list containing the hostname and bearer token.

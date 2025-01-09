@@ -2,7 +2,7 @@
 % Please edit documentation in R/client.R
 \name{discover}
 \alias{discover}
-\title{List Available Endpoints}
+\title{Discover Available Endpoints}
 \usage{
 discover()
 }

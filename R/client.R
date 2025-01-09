@@ -4,9 +4,8 @@
 #' 
 #' @return A list containing the hostname and bearer token.
 #' @importFrom jsonlite fromJSON
-load_config <- function(config_path = DEFAULT_CONFIG_PATH) {
-  config_path <- normalizePath(config_path, mustWork = FALSE)
-  
+load_config <- function() {
+  config_path <- .viaenv$config_path
   if (!file.exists(config_path)) {
     message("Configuration file not found. Initiating authentication...")
     authenticate(config_path = config_path)  # Trigger authentication if missing
@@ -20,7 +19,8 @@ load_config <- function(config_path = DEFAULT_CONFIG_PATH) {
   
   return(config)
 }
-#' List Available Endpoints
+
+#' Discover Available Endpoints
 #'
 #' Fetches and lists all available API endpoints from the Swagger documentation.
 #'
@@ -91,4 +91,31 @@ call_endpoint <- function(method, endpoint, params = list(), data = NULL) {
   }
   
   return(fromJSON(content(response, "text", encoding = "UTF-8")))
+}
+
+#' Get API Status
+#'
+#' Sends a simple GET request to check the status of the API.
+#'
+#' @return A character vector with the API status.
+#' @examples
+#' \dontrun{
+#' status <- get_api_status()
+#' print(status)
+#' }
+#' @importFrom httr GET add_headers status_code content
+#' @export
+get_api_status <- function() {
+  config <- load_config()
+  url <- paste0(config$hostname, "/api/status")
+  
+  headers <- add_headers(Authorization = paste("Bearer", config$bearer_token))
+  response <- GET(url, headers)
+  
+  if (status_code(response) != 200) {
+    stop("Failed to retrieve API status: ", content(response, "text", encoding = "UTF-8"))
+  }
+  
+  status <- fromJSON(content(response, "text", encoding = "UTF-8"))
+  return(status)
 }
