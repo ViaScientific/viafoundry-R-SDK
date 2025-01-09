@@ -65,6 +65,7 @@ utils::globalVariables(c("id", "name", "extension", "fileSize", "routePath"))
 #' @param sep The separator for tabular files. Default is tab-separated.
 #' @param download_dir The directory where non-tabular files will be downloaded.
 #' @return A data frame with the file contents if the file is tabular; otherwise, NULL after downloading the file.
+#' @importFrom httr write_disk
 #' @export
 loadFile <- function(json_data, processName, fileName, sep = "\t", download_dir = getwd()) {
   config <- load_config()  # Load the existing configuration
