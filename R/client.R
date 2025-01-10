@@ -104,6 +104,7 @@ call_endpoint <- function(method, endpoint, params = list(), data = NULL) {
 #' print(status)
 #' }
 #' @importFrom httr GET add_headers status_code content
+#' @importFrom jsonlite fromJSON
 #' @export
 get_api_status <- function() {
   config <- load_config()

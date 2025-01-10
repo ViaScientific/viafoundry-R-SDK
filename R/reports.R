@@ -1,13 +1,8 @@
-# Load required libraries
-library(jsonlite)
-library(httr)
-library(dplyr)
-
-
 #' Fetch the `JSON` data for a report
 #'
 #' @param reportID The ID of the report to fetch data for.
 #' @return The `JSON` object containing the report data.
+#' @importFrom httr GET
 #' @export
 fetchReportData <- function(reportID) {
   # Fetch data from the API
@@ -35,12 +30,10 @@ getProcessNames <- function(json_data) {
 #'
 #' @param json_data The `JSON` object containing the report data.
 #' @param processName The name of the process to filter by.
-#' @return A data frame containing `id`, `name`, `extension`, and `processName`.
-#' @importFrom dplyr %>% filter
-#' @importFrom purrr map_dfr
-#' @importFrom utils read.table
+#' @return A data frame containing `id`, `name`, `extension`, `fileSize`, and `routePath`.
+#' @importFrom dplyr select filter
 #' @export
-getFileNames <- function( json_data, processName ) {
+getFileNames <- function(json_data, processName) {
   # Filter the data to the specified `processName`
   process_data <- json_data$data[json_data$data$processName == processName, ]
   
@@ -54,7 +47,7 @@ getFileNames <- function( json_data, processName ) {
   return(files)
 }
 
-#Declare global variables
+# Declare global variables
 utils::globalVariables(c("id", "name", "extension", "fileSize", "routePath"))
 
 #' Load or download a file from a process and file name
@@ -65,7 +58,9 @@ utils::globalVariables(c("id", "name", "extension", "fileSize", "routePath"))
 #' @param sep The separator for tabular files. Default is tab-separated.
 #' @param download_dir The directory where non-tabular files will be downloaded.
 #' @return A data frame with the file contents if the file is tabular; otherwise, NULL after downloading the file.
-#' @importFrom httr write_disk
+#' @importFrom httr GET add_headers content status_code write_disk
+#' @importFrom utils read.table
+#' @importFrom dplyr  %>%
 #' @export
 loadFile <- function(json_data, processName, fileName, sep = "\t", download_dir = getwd()) {
   config <- load_config()  # Load the existing configuration
@@ -112,8 +107,8 @@ loadFile <- function(json_data, processName, fileName, sep = "\t", download_dir 
 #'
 #' @param json_data The `JSON` object containing the report data.
 #' @return A data frame containing `id`, `processName`, `name`, `extension`, `fileSize`, and `routePath`.
-#' @importFrom dplyr select
 #' @importFrom purrr map_dfr
+#' @importFrom dplyr  %>%
 #' @export
 getAllFileNames <- function(json_data) {
   # Extract all children from the data

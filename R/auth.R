@@ -18,6 +18,9 @@ DEFAULT_CONFIG_PATH <- "~/.viaenv"
 #' @param config_path Path to save the configuration file (default is `~/.viaenv`).
 #' @param overwrite Logical flag to overwrite the existing configuration file (default is FALSE).
 #' @return None. Saves the bearer token to the configuration file and sets the global config path.
+#' @importFrom httr POST status_code content add_headers set_cookies
+#' @importFrom jsonlite fromJSON toJSON
+#' @importFrom askpass askpass
 #' @export
 authenticate <- function(hostname, username = NULL, password = NULL, identity_type = 1, 
                          redirect_uri = "http://localhost", config_path = DEFAULT_CONFIG_PATH, 
@@ -64,6 +67,7 @@ authenticate <- function(hostname, username = NULL, password = NULL, identity_ty
   write(toJSON(config, pretty = TRUE, auto_unbox = TRUE), file = .viaenv$config_path)
   message("Authentication successful. Bearer token saved to ", .viaenv$config_path)
 }
+
 #' Login and retrieve the cookie token
 #'
 #' @param hostname The API hostname.
@@ -72,7 +76,7 @@ authenticate <- function(hostname, username = NULL, password = NULL, identity_ty
 #' @param identity_type The identity type.
 #' @param redirect_uri The redirect URI.
 #' @return The cookie token.
-#' @importFrom httr POST content headers
+#' @importFrom httr POST content headers status_code
 #' @export
 login <- function(hostname, username, password, identity_type = 1, redirect_uri = "http://localhost") {
   url <- paste0(hostname, "/api/auth/v1/login")
@@ -84,7 +88,7 @@ login <- function(hostname, username, password, identity_type = 1, redirect_uri 
   )
   
   response <- POST(url, body = body, encode = "json")
-
+  
   if (status_code(response) != 200) {
     stop("Login failed: ", content(response, "text", encoding = "UTF-8"))
   }
@@ -110,7 +114,7 @@ login <- function(hostname, username, password, identity_type = 1, redirect_uri 
 #' @param name The name of the token (default is "token").
 #' @return The bearer token.
 #' @importFrom httr POST add_headers content set_cookies
-#' @importFrom jsonlite toJSON
+#' @importFrom jsonlite fromJSON toJSON
 #' @export
 get_bearer_token <- function(hostname, cookie_token, name = "token") {
   url <- paste0(hostname, "/api/auth/v1/personal-access-token")
@@ -127,7 +131,7 @@ get_bearer_token <- function(hostname, cookie_token, name = "token") {
     expiresAt = calculate_expiration_date()
   )
   
-  response <- POST(url, headers, body = body, encode = "json")
+  response <- POST(url, headers, cookie, body = body, encode = "json")
   
   if (status_code(response) != 200) {
     stop("Failed to get bearer token: ", content(response, "text", encoding = "UTF-8"))
@@ -153,6 +157,7 @@ calculate_expiration_date <- function() {
 #'
 #' @return A list of headers with the bearer token.
 #' @importFrom httr add_headers
+#' @importFrom jsonlite fromJSON
 get_headers <- function() {
   config <- fromJSON(.viaenv$config_path)
   if (is.null(config$bearer_token)) {
