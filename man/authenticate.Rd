@@ -10,7 +10,8 @@ authenticate(
   password = NULL,
   identity_type = 1,
   redirect_uri = "http://localhost",
-  config_path = DEFAULT_CONFIG_PATH
+  config_path = DEFAULT_CONFIG_PATH,
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ authenticate(
 \item{redirect_uri}{The redirect `URI` (default is `http://your_viafoundry/redirect`).}
 
 \item{config_path}{Path to save the configuration file (default is `~/.viaenv`).}
+
+\item{overwrite}{Logical flag to overwrite the existing configuration file (default is FALSE).}
 }
 \value{
 None. Saves the bearer token to the configuration file and sets the global config path.
@@ -32,9 +35,4 @@ None. Saves the bearer token to the configuration file and sets the global confi
 \description{
 Authenticates the user with the `Via Foundry` API using their username and password.
 Retrieves a bearer token and saves it along with the hostname to a configuration file.
-}
-\examples{
-\dontrun{
-authenticate("https://your_viafoundry", "username", config_path = "~/custom_path/.viaenv")
-}
 }

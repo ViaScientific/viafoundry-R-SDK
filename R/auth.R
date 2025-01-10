@@ -16,27 +16,27 @@ DEFAULT_CONFIG_PATH <- "~/.viaenv"
 #' @param identity_type The identity type (default is 1).
 #' @param redirect_uri The redirect `URI` (default is `http://your_viafoundry/redirect`).
 #' @param config_path Path to save the configuration file (default is `~/.viaenv`).
+#' @param overwrite Logical flag to overwrite the existing configuration file (default is FALSE).
 #' @return None. Saves the bearer token to the configuration file and sets the global config path.
-#' @examples
-#' \dontrun{
-#' authenticate("https://your_viafoundry", "username", config_path = "~/custom_path/.viaenv")
-#' }
-#' @importFrom httr POST status_code content headers add_headers
-#' @importFrom jsonlite fromJSON toJSON
-#' @importFrom askpass askpass
 #' @export
-authenticate <- function(hostname, username = NULL, password = NULL, identity_type = 1, redirect_uri = "http://localhost", config_path = DEFAULT_CONFIG_PATH) {
+authenticate <- function(hostname, username = NULL, password = NULL, identity_type = 1, 
+                         redirect_uri = "http://localhost", config_path = DEFAULT_CONFIG_PATH, 
+                         overwrite = FALSE) {
   # Set the global config path in the environment
   .viaenv$config_path <- normalizePath(config_path, mustWork = FALSE)
   
-  # Load existing configuration if available
+  # Check if the configuration file exists and handle overwrite
   if (file.exists(.viaenv$config_path)) {
-    config <- fromJSON(.viaenv$config_path)
-    if (!is.null(config$hostname) && !is.null(config$bearer_token)) {
-      message("Using existing configuration from ", .viaenv$config_path)
-      return(config)
+    if (!overwrite) {
+      config <- fromJSON(.viaenv$config_path)
+      if (!is.null(config$hostname) && !is.null(config$bearer_token)) {
+        message("Using existing configuration from ", .viaenv$config_path)
+        return(config)
+      } else {
+        message("Configuration file is invalid or incomplete. Re-authenticating...")
+      }
     } else {
-      message("Configuration file is invalid or incomplete. Re-authenticating...")
+      message("Overwriting existing configuration file at ", .viaenv$config_path)
     }
   }
   
@@ -64,7 +64,6 @@ authenticate <- function(hostname, username = NULL, password = NULL, identity_ty
   write(toJSON(config, pretty = TRUE, auto_unbox = TRUE), file = .viaenv$config_path)
   message("Authentication successful. Bearer token saved to ", .viaenv$config_path)
 }
-
 #' Login and retrieve the cookie token
 #'
 #' @param hostname The API hostname.
@@ -110,11 +109,19 @@ login <- function(hostname, username, password, identity_type = 1, redirect_uri 
 #' @param cookie_token The cookie token.
 #' @param name The name of the token (default is "token").
 #' @return The bearer token.
-#' @importFrom httr POST add_headers content
+#' @importFrom httr POST add_headers content set_cookies
+#' @importFrom jsonlite toJSON
 #' @export
 get_bearer_token <- function(hostname, cookie_token, name = "token") {
   url <- paste0(hostname, "/api/auth/v1/personal-access-token")
-  headers <- add_headers(Cookie = paste0("viafoundry-cookie=", cookie_token))
+  headers <- add_headers(
+    "Content-Type" = "application/json",
+    "User-Agent" = "curl/8.7.1",
+    "Accept" = "*/*"
+  )
+  # Define Cookie separately to avoid duplication
+  cookie <- set_cookies(`viafoundry-cookie` = cookie_token)
+  
   body <- list(
     name = name,
     expiresAt = calculate_expiration_date()
