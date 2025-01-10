@@ -44,7 +44,9 @@ library(viafoundry)
 authenticate(
     hostname = "https://your_foundry_server",
     username = "username",
-    password = "password"
+    password = "password",
+    config_path = "~/.viaenv",
+    overwrite = TRUE
 )
 ```
 or use authenticate() function it will ask the information needed for authentication
@@ -164,9 +166,6 @@ getAllFileNames(report)
 
 loadFile(report, "DE_module_RSEM", "control_vs_exper_des.Rmd")
 
-# or 
-
-loadFile(report, "DE_module_RSEM", "control_vs_exper_des.Rmd", download_dir="/your/directory")
 
 ```
 
