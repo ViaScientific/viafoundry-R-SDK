@@ -127,3 +127,104 @@ getAllFileNames <- function(json_data) {
   
   return(all_files)
 }
+
+#' Upload a file to a specific report
+#'
+#' @param report_id The ID of the report for the API.
+#' @param file_path The local path to the file being uploaded.
+#' @param dir An optional directory name for organizing files.
+#' @return A list containing the server response.
+#' @importFrom httr POST add_headers upload_file
+#' @export
+uploadReportFile <- function(report_id, file_path, dir = NULL) {
+  tryCatch({
+    # Get all report paths
+    report_paths <- getAllReportPaths(report_id)
+    if (length(report_paths) == 0) {
+      stop("No reports found.")
+    }
+    
+    # Extract attempt ID from the first report path
+    attempt_id <- sub(".*report-resources/(.+?)/pubweb.*", "\\1", report_paths[1])
+    
+    # Define the upload endpoint
+    upload_endpoint <- paste0("/api/run/v1/", report_id, "/reports/upload/", attempt_id)
+    
+    # Debugging
+    print(upload_endpoint)
+    
+    # Prepare the file and data
+    files <- list(file = httr::upload_file(file_path))
+    data <- if (!is.null(dir)) list(dir = dir) else list()
+    
+    # Debugging
+    #print(files)
+    if (!is.null(dir)) print(data)
+    
+    # Call the API to upload the file
+    response <- call_endpoint(
+      method = "POST",
+      endpoint = upload_endpoint,
+      data = data,
+      files = files
+    )
+
+    return(response)
+  }, error = function(e) {
+    stop("Failed to upload file to report: ", conditionMessage(e))
+  })
+}
+
+#' Get unique report directories and attempt IDs for a specific report
+#'
+#' @param report_id The ID of the report.
+#' @return A character vector of unique report directories.
+#' @importFrom httr GET add_headers content
+#' @importFrom jsonlite fromJSON
+#' @export
+getAllReportPaths <- function(report_id) {
+  tryCatch({
+    # Define the API endpoint
+    endpoint <- paste0("/api/run/v1/", report_id, "/reports")
+    
+    # Call the API to fetch report data
+    response <- call_endpoint(method = "GET", endpoint = endpoint)
+    reports <- response$data
+    
+    if (is.null(reports) || length(reports) == 0) {
+      stop("No reports found.")
+    }
+    
+    # Extract unique `routePath` entries
+    unique_paths <- unique(reports$routePath)
+    return(unique_paths)
+  }, error = function(e) {
+    stop("Failed to fetch report directories: ", conditionMessage(e))
+  })
+}
+
+#' Get directories following "pubweb" in the routePath
+#'
+#' @param report_id The ID of the report.
+#' @return A character vector of unique directories found after "pubweb".
+#' @importFrom stringr str_extract
+#' @export
+getReportDirs <- function(report_id) {
+  tryCatch({
+    # Get all routePaths for the report
+    all_paths <- getAllReportPaths(report_id)
+    if (length(all_paths) == 0) {
+      stop("No reports found.")
+    }
+    
+    # Extract directories after "pubweb"
+    report_dirs <- unique(sub(".*pubweb/(.+)", "\\1", all_paths[grepl("pubweb/", all_paths)]))
+    if (length(report_dirs) == 0) {
+      stop("No directories found after 'pubweb'.")
+    }
+    
+    return(report_dirs)
+  }, error = function(e) {
+    stop("Failed to fetch possible directories: ", conditionMessage(e))
+  })
+}

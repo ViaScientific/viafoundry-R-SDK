@@ -51,24 +51,29 @@ discover <- function() {
   return(names(swagger$paths))
 }
 
-#' Call an API Endpoint
+#' Call an API Endpoint with Optional File Upload
 #'
-#' Sends an HTTP request to a specified API endpoint using the stored bearer token for authentication.
+#' Sends an HTTP request to a specified API endpoint using the stored bearer token for authentication,
+#' optionally supporting file uploads.
 #'
 #' @param method The HTTP method (e.g., "GET", "POST", "PUT", "DELETE").
 #' @param endpoint The API endpoint (e.g., `/api/projects`).
 #' @param params A named list of query parameters (optional).
 #' @param data A named list or `JSON` object to include in the request body (optional).
+#' @param files A list of files to upload, where each file is a named list with `name`, `path`, and optionally `type`.
 #' @return A list containing the API response.
 #' @examples
 #' \dontrun{
-#' response <- call_endpoint("GET", "/api/projects")
+#' response <- call_endpoint("POST", "/api/projects/upload", files = list(
+#'   list(name = "file1", path = "path/to/file1.txt", type = "text/plain"),
+#'   list(name = "file2", path = "path/to/file2.csv", type = "text/csv")
+#' ))
 #' print(response)
 #' }
-#' @importFrom httr GET POST PUT DELETE add_headers status_code content
-#' @importFrom jsonlite fromJSON
+#' @importFrom httr GET POST PUT DELETE add_headers status_code content upload_file
+#' @importFrom jsonlite toJSON fromJSON
 #' @export
-call_endpoint <- function(method, endpoint, params = list(), data = NULL) {
+call_endpoint <- function(method, endpoint, params = list(), data = NULL, files = NULL) {
   config <- load_config()
   url <- paste0(config$hostname, endpoint)
   headers <- add_headers(Authorization = paste("Bearer", config$bearer_token))
@@ -77,20 +82,43 @@ call_endpoint <- function(method, endpoint, params = list(), data = NULL) {
     stop("Invalid HTTP method: ", method)
   }
   
-  # Handle API requests based on method
-  response <- switch(
-    method,
-    GET = GET(url, headers, query = params),
-    POST = POST(url, headers, body = data, encode = "json"),
-    PUT = PUT(url, headers, body = data, encode = "json"),
-    DELETE = DELETE(url, headers, query = params)
-  )
+  # Handle file uploads
+  if (!is.null(files) && length(files) > 0) {
+    # Prepare files for upload
+    upload_files <- lapply(files, function(file) {
+      upload_file(file$path, type = file$type)
+    })
+    
+    # Create a named list with data and files
+    body <- c(data, upload_files)
+    
+    response <- POST(url, headers, query = params, body = body, encode = "multipart")
+  } else {
+    # Standard request
+    if (!is.null(data)) {
+      data <- toJSON(data, auto_unbox = TRUE)
+    }
+    
+    response <- switch(
+      method,
+      GET = GET(url, headers, query = params),
+      POST = POST(url, headers, body = data, encode = "json", query = params),
+      PUT = PUT(url, headers, body = data, encode = "json", query = params),
+      DELETE = DELETE(url, headers, query = params)
+    )
+  }
   
-  if (status_code(response) != 200) {
+  # Handle the response
+  if (status_code(response) >= 400) {
     stop("API request failed: ", content(response, "text", encoding = "UTF-8"))
   }
   
-  return(fromJSON(content(response, "text", encoding = "UTF-8")))
+  content_type <- headers(response)$`content-type`
+  if (!is.null(content_type) && grepl("application/json", content_type, fixed = TRUE)) {
+    return(fromJSON(content(response, "text", encoding = "UTF-8")))
+  } else {
+    return(content(response, "text", encoding = "UTF-8"))
+  }
 }
 
 #' Get API Status

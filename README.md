@@ -166,10 +166,27 @@ getAllFileNames(report)
 
 loadFile(report, "DE_module_RSEM", "control_vs_exper_des.Rmd")
 
-
 ```
 
-This file is automatically created during authentication.
+### Uploading files to the reports section in Foundry
+
+You can first get the available directories in report and upload the files to those directories. After 
+creating new plots(e.g png, pdf) or would like to upload some analysis code to organize the data within the 
+report section you can use this method.
+
+```R
+
+library(viafoundry)
+#get report id from Via Foundry
+reportID <- 1 
+
+getReportDirs(1) # [1] "summary"       "multiqc"     "multiqc"  etc.
+
+response <- uploadReportFile(1, "FILE_LOCATION", dir="summary") # Change the file location
+
+print(response)
+```
+
 
 ## Troubleshooting
 

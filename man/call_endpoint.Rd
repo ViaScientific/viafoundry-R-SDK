@@ -2,9 +2,9 @@
 % Please edit documentation in R/client.R
 \name{call_endpoint}
 \alias{call_endpoint}
-\title{Call an API Endpoint}
+\title{Call an API Endpoint with Optional File Upload}
 \usage{
-call_endpoint(method, endpoint, params = list(), data = NULL)
+call_endpoint(method, endpoint, params = list(), data = NULL, files = NULL)
 }
 \arguments{
 \item{method}{The HTTP method (e.g., "GET", "POST", "PUT", "DELETE").}
@@ -14,16 +14,22 @@ call_endpoint(method, endpoint, params = list(), data = NULL)
 \item{params}{A named list of query parameters (optional).}
 
 \item{data}{A named list or `JSON` object to include in the request body (optional).}
+
+\item{files}{A list of files to upload, where each file is a named list with `name`, `path`, and optionally `type`.}
 }
 \value{
 A list containing the API response.
 }
 \description{
-Sends an HTTP request to a specified API endpoint using the stored bearer token for authentication.
+Sends an HTTP request to a specified API endpoint using the stored bearer token for authentication,
+optionally supporting file uploads.
 }
 \examples{
 \dontrun{
-response <- call_endpoint("GET", "/api/projects")
+response <- call_endpoint("POST", "/api/projects/upload", files = list(
+  list(name = "file1", path = "path/to/file1.txt", type = "text/plain"),
+  list(name = "file2", path = "path/to/file2.csv", type = "text/csv")
+))
 print(response)
 }
 }
