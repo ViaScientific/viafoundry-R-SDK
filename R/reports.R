@@ -135,13 +135,19 @@ getAllFileNames <- function(json_data) {
 #' @param dir An optional directory name for organizing files.
 #' @return A list containing the server response.
 #' @importFrom httr POST add_headers upload_file
+#' @importFrom mime guess_type
 #' @export
 uploadReportFile <- function(report_id, file_path, dir = NULL) {
   tryCatch({
+    # Check if file exists
+    if (!file.exists(file_path)) {
+      stop("The file does not exist: ", file_path)
+    }
+    
     # Get all report paths
     report_paths <- getAllReportPaths(report_id)
     if (length(report_paths) == 0) {
-      stop("No reports found.")
+      stop("No reports found for the given report ID.")
     }
     
     # Extract attempt ID from the first report path
@@ -150,16 +156,20 @@ uploadReportFile <- function(report_id, file_path, dir = NULL) {
     # Define the upload endpoint
     upload_endpoint <- paste0("/api/run/v1/", report_id, "/reports/upload/", attempt_id)
     
-    # Debugging
-    print(upload_endpoint)
+    # Infer MIME type for the file
+    mime_type <- mime::guess_type(file_path)
+    if (is.null(mime_type)) {
+      stop("Unable to determine the MIME type for the file: ", file_path)
+    }
     
     # Prepare the file and data
-    files <- list(file = httr::upload_file(file_path))
-    data <- if (!is.null(dir)) list(dir = dir) else list()
+    files <- list(file = httr::upload_file(file_path, type = mime_type))
+    data <- if (!is.null(dir)) list(dir = dir) else NULL  # Ensure data is NULL if dir is not provided
     
     # Debugging
-    #print(files)
-    if (!is.null(dir)) print(data)
+    print(paste("Uploading file to:", upload_endpoint))
+    print(paste("File MIME type:", mime_type))
+    if (!is.null(data)) print(data)
     
     # Call the API to upload the file
     response <- call_endpoint(
@@ -168,7 +178,7 @@ uploadReportFile <- function(report_id, file_path, dir = NULL) {
       data = data,
       files = files
     )
-
+    
     return(response)
   }, error = function(e) {
     stop("Failed to upload file to report: ", conditionMessage(e))
