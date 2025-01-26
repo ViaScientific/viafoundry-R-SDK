@@ -238,3 +238,61 @@ getReportDirs <- function(report_id) {
     stop("Failed to fetch possible directories: ", conditionMessage(e))
   })
 }
+
+#' Prepare Session History
+#'
+#' Saves the current R session history to a timestamped `.Rhistory` file.
+#' @importFrom utils savehistory
+#' @return The file path of the saved session history file.
+#' @examples
+#' \dontrun{
+#'   history_file <- prepareSessionHistory()
+#'   print(history_file)
+#' }
+#' @export
+prepareSessionHistory <- function() {
+  # Get the current timestamp for unique filenames
+  timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
+  history_file_path <- paste0("session_Rhistory_", timestamp, ".txt")
+  
+  # Save the session history
+  tryCatch({
+    savehistory(file = history_file_path)
+    message("Session history saved to: ", history_file_path)
+    return(history_file_path)
+  }, error = function(e) {
+    stop("Failed to prepare session history: ", e$message)
+  })
+}
+
+#' Upload Session History
+#'
+#' Uploads the current session history to a specified report.
+#'
+#' @param report_id The ID of the report.
+#' @param dir The directory name for organizing session history files on the server. Defaults to `NULL`.
+#' @return The parsed server response.
+#' @importFrom httr POST upload_file
+#' @examples
+#' \dontrun{
+#'   response <- uploadSessionHistory(
+#'     report_id = "12345",
+#'     dir = "session_logs",
+#'   )
+#'   print(response)
+#' }
+#' @export
+#' 
+uploadSessionHistory <- function(report_id, dir = NULL) {
+  # Prepare session history
+  history_file_path <- prepareSessionHistory()
+  
+  # Build the request
+  tryCatch({
+    if (uploadReportFile(report_id = report_id, file_path = history_file_path, dir = dir) == "OK")
+        message("Session history upload successful.")
+    return(TRUE)
+  }, error = function(e) {
+    stop("Error during session history upload: ", e$message)
+  })
+}

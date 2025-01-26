@@ -1,5 +1,11 @@
 # `Via Foundry R SDK Changelog`
 
+## Version 1.0.1 (2025-01-26)
+- Session Save and upload the session to a report section functionalities added 
+- Upload/Download from Report section functionalities added
+- Added new process management functionalities:
+- Added parameter management functions:
+
 ## Version 1.0.0 (2024-12-18)
 ### Initial Release
 - Added `authenticate()` function for logging into the Via Foundry API and saving authentication details to `~/.viaenv`.

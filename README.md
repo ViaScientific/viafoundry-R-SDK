@@ -187,6 +187,167 @@ response <- uploadReportFile(1, "FILE_LOCATION", dir="summary") # Change the fil
 print(response)
 ```
 
+## Process Management Functionalities
+
+### Process Functions
+
+**List All Processes**
+   - Fetches all existing processes from the API.
+   - Example:
+     ```R
+     processes <- listProcesses()
+     print(processes)
+     ```
+
+**Get Process Details**
+   - Retrieves details for a specific process.
+   - Example:
+     ```R
+     process_details <- getProcess("12345")
+     print(process_details)
+     ```
+
+**Create a New Process**
+   - Creates a new process using provided data. Make sure add all necessary parameters to create a process.
+   - Example:
+     ```R
+     new_process <- createProcess(list(name = "New Process", description = "Example Process"))
+     print(new_process)
+     ```
+
+**Update an Existing Process**
+   - Updates a process with given data.
+   - Example:
+     ```R
+     updated_process <- updateProcess("12345", list(name = "Updated Process"))
+     print(updated_process)
+     ```
+
+**Delete a Process**
+   - Deletes a process by its ID.
+   - Example:
+     ```R
+     deleteProcess("12345")
+     ```
+
+**Duplicate a Process**
+   - Duplicates an existing process.
+   - Example:
+     ```R
+     duplicated_process <- duplicateProcess("12345")
+     print(duplicated_process)
+     ```
+
+**Get Process Revisions**
+   - Fetches all revisions for a given process.
+   - Example:
+     ```R
+     revisions <- getProcessRevisions("12345")
+     print(revisions)
+     ```
+
+**Check Process Usage**
+   - Checks if a process is used in pipelines or runs.
+   - Example:
+     ```R
+     usage <- checkProcessUsage("12345")
+     print(usage)
+     ```
+
+### Menu Group Functions
+
+**Create a Menu Group**
+   - Creates a new menu group.
+   - Example:
+     ```R
+     new_menu_group <- createMenuGroup("New Menu Group")
+     print(new_menu_group)
+     ```
+
+**List Menu Groups**
+   - Lists all menu groups.
+   - Example:
+     ```R
+     menu_groups <- listMenuGroups()
+     print(menu_groups)
+     ```
+
+**Update a Menu Group**
+   - Updates a menu group name.
+   - Example:
+     ```R
+     updated_menu_group <- updateMenuGroup("123", "Updated Menu Name")
+     print(updated_menu_group)
+     ```
+
+### Parameter Functions
+
+**List Parameters**
+   - Fetches all parameters.
+   - Example:
+     ```R
+     parameters <- listParameters()
+     print(parameters)
+     ```
+
+**Create a New Parameter**
+   - Creates a new parameter.
+   - Example:
+     ```R
+     new_parameter <- createParameter(list(name = "New Param", type = "string"))
+     print(new_parameter)
+     ```
+
+**Update a Parameter**
+   - Updates an existing parameter.
+   - Example:
+     ```R
+     updated_parameter <- updateParameter("123", list(name = "Updated Param"))
+     print(updated_parameter)
+     ```
+
+**Delete a Parameter**
+   - Deletes a parameter by its ID.
+   - Example:
+     ```R
+     deleteParameter("123")
+     ```
+
+**Get Pipeline Parameters**
+   - Retrieves parameter list for a pipeline.
+   - Example:
+     ```R
+     pipeline_params <- getPipelineParameters("pipeline123")
+     print(pipeline_params)
+     ```
+
+
+## Session History Functionality
+
+### Save and Upload Session History
+
+The ViaFoundry SDK for R allows you to save your session history while working in R. This is particularly useful for maintaining reproducibility and tracking the commands you execute.
+
+### Saving Session History
+To save your session history to a file with a timestamp, you can use the `prepareSessionHistory` function:
+
+```R
+# Save session history
+history_file <- prepareSessionHistory()
+print(paste("Session history saved to:", history_file))
+```
+
+### Uploading Session History
+You can also upload your session history to the server.
+
+#### Upload Session History Separately
+```R
+response <- uploadSessionHistory(report_id = "12345", dir = "session_logs")
+print("Session History Upload Response:", response)
+```
+
+This functionality ensures that your session history is automatically saved and uploaded for reproducibility.
+
 
 ## Troubleshooting
 
