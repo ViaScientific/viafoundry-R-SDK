@@ -353,12 +353,12 @@ This functionality ensures that your session history is automatically saved and 
 
 ### Common Issues
 
-	1.	Authentication Fails:
-   	-	Verify your `username`, `password`, and `hostname`.
-	  -	Check if the token in the `~/.viaenv` file is expired.
-	2.	API Call Fails:
-  	-	Ensure the endpoint exists and you have the necessary permissions.
-  	-	Check the API documentation for the correct method and parameters.
-	3.	Server Returns HTML Instead of JSON:
-  	-	Ensure the Accept: application/json header is sent with requests. This is handled automatically by the package.
-  4. If you want to re-authenticate remove the `viaenv` file (e.g `~/.viaenv`) 
+1.	Authentication Fails:
+  -	Verify your `username`, `password`, and `hostname`.
+  -	Check if the token in the `~/.viaenv` file is expired.
+2.	API Call Fails:
+  -	Ensure the endpoint exists and you have the necessary permissions.
+  -	Check the API documentation for the correct method and parameters.
+3.	Server Returns HTML Instead of JSON:
+  -	Ensure the Accept: application/json header is sent with requests. This is handled automatically by the package.
+4. If you want to re-authenticate remove the `viaenv` file (e.g `~/.viaenv`) 
