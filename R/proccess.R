@@ -209,6 +209,93 @@ deleteProcess <- function(processID) {
   })
 }
 
+#' Create Process Config
+#'
+#' Assembles a complete process configuration object.
+#'
+#' @param name Name of the process.
+#' @param menuGroupName Name of the menu group.
+#' @param inputParams A list of input parameter specs.
+#' @param outputParams A list of output parameter specs.
+#' @param summary Optional. Summary string.
+#' @param scriptBody Optional. Script body.
+#' @param scriptLanguage Optional. Language (default "bash").
+#' @param scriptHeader Optional. Script header.
+#' @param scriptFooter Optional. Script footer.
+#' @param permissionSettings Optional. A list of permission settings.
+#' @param revisionComment Optional. Revision comment.
+#' @return A list representing the full process config.
+#' @export
+createProcessConfig <- function(
+    name,
+    menuGroupName,
+    inputParams,
+    outputParams,
+    summary = "",
+    scriptBody = "",
+    scriptLanguage = "bash",
+    scriptHeader = "",
+    scriptFooter = "",
+    permissionSettings = list(viewPermissions = 3, writeGroupIds = list()),
+    revisionComment = "Initial revision"
+) {
+  menuGroupID <- getMenuGroupByName(menuGroupName)
+  
+  if (is.null(menuGroupID)) {
+    created <- createMenuGroup(menuGroupName)
+    menuGroupID <- created$id
+  }
+  
+  processParameter <- function(param) {
+    matches <- filterParameters(
+      name = param$name,
+      qualifier = param$qualifier,
+      fileType = param$fileType,
+      id = param$id
+    )
+    if (length(matches) == 0) {
+      createParameter(list(
+        name = param$name,
+        qualifier = param$qualifier,
+        fileType = param$fileType
+      ))
+      matches <- filterParameters(
+        name = param$name,
+        qualifier = param$qualifier,
+        fileType = param$fileType,
+        id = param$id
+      )
+    }
+    p <- matches[[1]]
+    return(list(
+      parameterId = p$id,
+      displayName = param$displayName %||% p$name,
+      operator = param$operator %||% "",
+      operatorContent = param$operatorContent %||% "",
+      optional = param$optional %||% FALSE,
+      test = param$test %||% ""
+    ))
+  }
+  
+  config <- list(
+    name = name,
+    menuGroupId = menuGroupID,
+    summary = summary,
+    inputParameters = lapply(inputParams, processParameter),
+    outputParameters = lapply(outputParams, processParameter),
+    script = list(
+      body = scriptBody,
+      header = scriptHeader,
+      footer = scriptFooter,
+      language = scriptLanguage
+    ),
+    permissionSettings = permissionSettings,
+    revisionComment = revisionComment
+  )
+  
+  return(config)
+}
+
 #' Get Pipeline Parameters
 #'
 #' Retrieves the list of parameters for a specific pipeline.
@@ -301,5 +388,62 @@ deleteParameter <- function(parameterID) {
     return(response)
   }, error = function(e) {
     stop("Error 1016: Failed to delete parameter with ID ", parameterID, ": ", e$message)
+  })
+}
+
+#' Filter Parameters
+#'
+#' Filters parameters by name, qualifier, file type, and/or ID.
+#'
+#' @param name Optional. Name to filter.
+#' @param qualifier Optional. Qualifier to filter.
+#' @param fileType Optional. File type to filter.
+#' @param id Optional. ID to filter.
+#' @return A list of filtered parameters.
+#' @export
+filterParameters <- function(name = NULL, qualifier = NULL, fileType = NULL, id = NULL) {
+  tryCatch({
+    response <- listParameters()
+    parameters <- if (!is.null(response$data)) response$data else list()
+    filtered <- Filter(function(param) {
+      if (!is.null(name) && !grepl(tolower(name), tolower(param$name))) return(FALSE)
+      if (!is.null(qualifier) && tolower(qualifier) != tolower(param$qualifier)) return(FALSE)
+      if (!is.null(fileType) && tolower(fileType) != tolower(param$fileType)) return(FALSE)
+      if (!is.null(id) && id != as.character(param$id)) return(FALSE)
+      return(TRUE)
+    }, parameters)
+    
+    for (param in filtered) {
+      message(sprintf("ID: %s, Name: %s, Qualifier: %s, FileType: %s", 
+                      param$id, param$name, param$qualifier %||% "", param$fileType %||% ""))
+    }
+    
+    return(filtered)
+  }, error = function(e) {
+    message("Error filtering parameters: ", e$message)
+    return(list())
+  })
+}
+
+#' Get Menu Group by Name
+#'
+#' Searches for a menu group by name and returns its ID.
+#'
+#' @param groupName The name of the menu group.
+#' @return The ID of the menu group if found, otherwise NULL.
+#' @export
+getMenuGroupByName <- function(groupName) {
+  tryCatch({
+    response <- listMenuGroups()
+    groups <- response$data
+    for (group in groups) {
+      if (tolower(group$name) == tolower(groupName)) {
+        return(group$id)
+      }
+    }
+    return(NULL)
+  }, error = function(e) {
+    message("Error finding menu group: ", e$message)
+    return(NULL)
   })
 }

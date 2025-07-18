@@ -4,6 +4,7 @@
 #' 
 #' @return A list containing the hostname and bearer token.
 #' @importFrom jsonlite fromJSON
+#' @export
 load_config <- function() {
   config_path <- .viaenv$config_path
   if (!file.exists(config_path)) {

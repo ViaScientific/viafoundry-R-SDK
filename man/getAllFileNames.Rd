@@ -2,16 +2,16 @@
 % Please edit documentation in R/reports.R
 \name{getAllFileNames}
 \alias{getAllFileNames}
-\title{Extract children names across all processes}
+\title{Recursively extract all files from deeply nested report JSON}
 \usage{
 getAllFileNames(json_data)
 }
 \arguments{
-\item{json_data}{The `JSON` object containing the report data.}
+\item{json_data}{The parsed report JSON returned from fetchReportData()}
 }
 \value{
-A data frame containing `id`, `processName`, `name`, `extension`, `fileSize`, and `routePath`.
+A data frame of all files and their metadata
 }
 \description{
-Extract children names across all processes
+Recursively extract all files from deeply nested report JSON
 }

@@ -35,14 +35,8 @@ getProcessNames <- function(json_data) {
 #' @export
 getFileNames <- function(json_data, processName) {
   # Filter the data to the specified `processName`
-  process_data <- json_data$data[json_data$data$processName == processName, ]
-  
-  # Extract the children associated with the process
-  children <- process_data$children[[1]]
-  
-  # Select only the required columns
-  files <- children %>%
-    dplyr::select(id, processName, name, extension, fileSize, routePath)
+  all_file_names <- getAllFileNames(json_data)
+  files <- all_file_names[all_file_names$processName == processName, ]
   
   return(files)
 }
@@ -60,7 +54,7 @@ utils::globalVariables(c("id", "name", "extension", "fileSize", "routePath"))
 #' @return A data frame with the file contents if the file is tabular; otherwise, NULL after downloading the file.
 #' @importFrom httr GET add_headers content status_code write_disk
 #' @importFrom utils read.table
-#' @importFrom dplyr  %>%
+#' @importFrom dplyr %>% filter
 #' @export
 loadFile <- function(json_data, processName, fileName, sep = "\t", download_dir = getwd()) {
   config <- load_config()  # Load the existing configuration
@@ -103,30 +97,72 @@ loadFile <- function(json_data, processName, fileName, sep = "\t", download_dir 
   }
 }
 
-#' Extract children names across all processes
+# Declare global variables
+utils::globalVariables(c("id", "name", "extension", "fileSize", "routePath"))
+
+#' Recursively extract all files from deeply nested report JSON
 #'
-#' @param json_data The `JSON` object containing the report data.
-#' @return A data frame containing `id`, `processName`, `name`, `extension`, `fileSize`, and `routePath`.
-#' @importFrom purrr map_dfr
-#' @importFrom dplyr  %>%
+#' @param json_data The parsed report JSON returned from fetchReportData()
+#' @return A data frame of all files and their metadata
+#' @importFrom dplyr bind_rows
 #' @export
 getAllFileNames <- function(json_data) {
-  # Extract all children from the data
-  all_files <- purrr::map_dfr(json_data$data$children, function(children) {
-    # Convert children to a data frame, preserving required fields
-    data.frame(
-      id = children$id,
-      processName = children$processName,
-      name = children$name,
-      extension = children$extension,
-      fileSize = children$fileSize,
-      routePath = children$routePath,
-      stringsAsFactors = FALSE
-    )
-  })
+  `%||%` <- function(a, b) if (!is.null(a)) a else b
+  collect_files <- function(children_df, process_name) {
+    results <- list()
+    
+    for (i in seq_len(nrow(children_df))) {
+      child <- as.list(children_df[i, ])
+      child$processName <- process_name
+      
+      # If the child has further nested children, recurse
+      if (!is.null(child$children) && is.data.frame(child$children[[1]]) && nrow(child$children[[1]]) > 0) {
+        nested <- collect_files(child$children[[1]], process_name)
+        results <- c(results, nested)
+      } else {
+        file_path <- if (!is.null(child$routePath) && grepl("pubweb/", child$routePath)) {
+          sub(".*pubweb/", "", child$routePath)
+        } else {
+          NA
+        }
+        
+        results[[length(results) + 1]] <- data.frame(
+          id = child$id %||% NA,
+          processName = child$processName %||% NA,
+          name = child$name %||% NA,
+          extension = child$extension %||% NA,
+          fileSize = child$fileSize %||% NA,
+          routePath = child$routePath %||% NA,
+          file_path = file_path,
+          stringsAsFactors = FALSE
+        )
+      }
+    }
+    
+    return(results)
+  }
   
-  return(all_files)
+  # Traverse all top-level rows
+  all_files <- list()
+  for (i in seq_len(nrow(json_data$data))) {
+    row <- json_data$data[i, ]
+    process_name <- row$processName %||% NA
+    children <- row$children[[1]]
+    
+    if (!is.null(children) && is.data.frame(children) && nrow(children) > 0) {
+      nested_files <- collect_files(children, process_name)
+      all_files <- c(all_files, nested_files)
+    }
+  }
+  
+  if (length(all_files) == 0) {
+    message("No files found in report.")
+    return(data.frame())
+  }
+  
+  return(bind_rows(all_files))
 }
+
 
 #' Upload a file to a specific report
 #'
