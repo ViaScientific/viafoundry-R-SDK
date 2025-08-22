@@ -5,7 +5,7 @@
 - Upload/Download from Report section functionalities added
 - Added new process management functionalities:
 - Added parameter management functions:
-- Metadata managment added 
+- Metadata management added 
 
 ## Version 1.0.0 (2024-12-18)
 ### Initial Release
