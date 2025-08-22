@@ -96,9 +96,9 @@ call_endpoint <- function(method, endpoint, params = list(), data = NULL, files 
     response <- POST(url, headers, query = params, body = body, encode = "multipart")
   } else {
     # Standard request
-    if (!is.null(data)) {
-      data <- toJSON(data, auto_unbox = TRUE)
-    }
+    #if (!is.null(data)) {
+    #  data <- toJSON(data, auto_unbox = TRUE)
+    #}
     
     response <- switch(
       method,

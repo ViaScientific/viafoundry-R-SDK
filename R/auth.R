@@ -92,9 +92,14 @@ login <- function(hostname, username, password, identity_type = 1, redirect_uri 
   if (status_code(response) != 200) {
     stop("Login failed: ", content(response, "text", encoding = "UTF-8"))
   }
-  
+  h<-headers(response)
   # Extract the cookie token from Set-Cookie header
-  set_cookie <- headers(response)$`set-cookie`
+  cookies <- h[grep("set-cookie", names(h), ignore.case = TRUE)]
+  
+  # Find the cookie that starts with "viafoundry-cookie="
+  viafoundry_cookie <- unlist(cookies)
+  set_cookie <- viafoundry_cookie[grepl("^viafoundry-cookie=", viafoundry_cookie)]
+
   cookie_key <- "viafoundry-cookie="
   start <- regexpr(cookie_key, set_cookie)
   if (start == -1) {

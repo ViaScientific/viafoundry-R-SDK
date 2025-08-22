@@ -1,7 +1,7 @@
 Package: viafoundry
 Type: Package
 Title: R Client for 'Via Foundry' API
-Version: 1.0.1
+Version: 1.0.2
 Language: en-US
 Authors@R:
     c(person(given = "Alper",
