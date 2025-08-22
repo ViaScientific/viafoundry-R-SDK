@@ -1,10 +1,11 @@
 # `Via Foundry R SDK Changelog`
 
-## Version 1.0.1 (2025-01-26)
+## Version 1.0.1 (2025-08-22)
 - Session Save and upload the session to a report section functionalities added 
 - Upload/Download from Report section functionalities added
 - Added new process management functionalities:
 - Added parameter management functions:
+- Metadata managment added 
 
 ## Version 1.0.0 (2024-12-18)
 ### Initial Release
