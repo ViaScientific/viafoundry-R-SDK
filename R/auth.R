@@ -7,15 +7,15 @@ DEFAULT_CONFIG_PATH <- "~/.viaenv"
 
 #' Authenticate with the `Via Foundry` API
 #'
-#' Authenticates the user with the `Via Foundry` API using their username and password.
-#' Retrieves a bearer token and saves it along with the hostname to a configuration file.
+#' Authenticates the user with the `Via Foundry API` using their username and password.
+#' Retrieves a bearer token and saves it along with the `API url` to a configuration file.
 #'
-#' @param hostname The API `hostname` (e.g., `https://your_viafoundry`).
+#' @param hostname The API url.
 #' @param username The login username.
 #' @param password The login password (optional; will prompt if not provided).
 #' @param identity_type The identity type (default is 1).
-#' @param redirect_uri The redirect `URI` (default is `http://your_viafoundry/redirect`).
-#' @param config_path Path to save the configuration file (default is `~/.viaenv`).
+#' @param redirect_uri The redirect `URI`.
+#' @param config_path Path to save the configuration file.
 #' @param overwrite Logical flag to overwrite the existing configuration file (default is FALSE).
 #' @return None. Saves the bearer token to the configuration file and sets the global config path.
 #' @importFrom httr POST status_code content add_headers set_cookies
@@ -26,6 +26,7 @@ authenticate <- function(hostname, username = NULL, password = NULL, identity_ty
                          redirect_uri = "http://localhost", config_path = DEFAULT_CONFIG_PATH, 
                          overwrite = FALSE) {
   # Set the global config path in the environment
+  # Default config path is `~/.viaenv`
   .viaenv$config_path <- normalizePath(config_path, mustWork = FALSE)
   
   # Check if the configuration file exists and handle overwrite
@@ -70,7 +71,7 @@ authenticate <- function(hostname, username = NULL, password = NULL, identity_ty
 
 #' Login and retrieve the cookie token
 #'
-#' @param hostname The API hostname.
+#' @param hostname The API url
 #' @param username The login username.
 #' @param password The login password.
 #' @param identity_type The identity type.
@@ -114,7 +115,7 @@ login <- function(hostname, username, password, identity_type = 1, redirect_uri 
 
 #' Get bearer token using the cookie token
 #'
-#' @param hostname The API hostname.
+#' @param hostname The API url
 #' @param cookie_token The cookie token.
 #' @param name The name of the token (default is "token").
 #' @return The bearer token.

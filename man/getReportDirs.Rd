@@ -2,7 +2,7 @@
 % Please edit documentation in R/reports.R
 \name{getReportDirs}
 \alias{getReportDirs}
-\title{Get directories following "pubweb" in the routePath}
+\title{Get directories following pub web in the route path}
 \usage{
 getReportDirs(report_id)
 }
@@ -10,8 +10,8 @@ getReportDirs(report_id)
 \item{report_id}{The ID of the report.}
 }
 \value{
-A character vector of unique directories found after "pubweb".
+A character vector of unique directories found after pub web.
 }
 \description{
-Get directories following "pubweb" in the routePath
+Get directories following pub web in the route path
 }

@@ -7,7 +7,7 @@
 load_config()
 }
 \value{
-A list containing the hostname and bearer token.
+A list containing the host name and bearer token.
 }
 \description{
 Loads the configuration file or triggers authentication if the file is missing.

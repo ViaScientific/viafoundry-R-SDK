@@ -10,7 +10,7 @@ prepareSessionHistory()
 The file path of the saved session history file.
 }
 \description{
-Saves the current R session history to a timestamped `.Rhistory` file.
+Saves the current R session history to a timestamped `R history` file.
 }
 \examples{
 \dontrun{

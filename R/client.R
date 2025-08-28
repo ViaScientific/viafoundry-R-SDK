@@ -2,7 +2,7 @@
 #'
 #' Loads the configuration file or triggers authentication if the file is missing.
 #' 
-#' @return A list containing the hostname and bearer token.
+#' @return A list containing the host name and bearer token.
 #' @importFrom jsonlite fromJSON
 #' @export
 load_config <- function() {
@@ -58,7 +58,7 @@ discover <- function() {
 #' optionally supporting file uploads.
 #'
 #' @param method The HTTP method (e.g., "GET", "POST", "PUT", "DELETE").
-#' @param endpoint The API endpoint (e.g., `/api/projects`).
+#' @param endpoint The API endpoint.
 #' @param params A named list of query parameters (optional).
 #' @param data A named list or `JSON` object to include in the request body (optional).
 #' @param files A list of files to upload, where each file is a named list with `name`, `path`, and optionally `type`.

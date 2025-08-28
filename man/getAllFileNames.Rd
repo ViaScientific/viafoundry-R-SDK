@@ -7,7 +7,7 @@
 getAllFileNames(json_data)
 }
 \arguments{
-\item{json_data}{The parsed report JSON returned from fetchReportData()}
+\item{json_data}{The parsed report JSON returned from fetch Report Data function}
 }
 \value{
 A data frame of all files and their metadata

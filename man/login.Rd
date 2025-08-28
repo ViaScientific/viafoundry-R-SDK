@@ -13,7 +13,7 @@ login(
 )
 }
 \arguments{
-\item{hostname}{The API hostname.}
+\item{hostname}{The API url}
 
 \item{username}{The login username.}
 

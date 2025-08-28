@@ -7,7 +7,7 @@
 get_bearer_token(hostname, cookie_token, name = "token")
 }
 \arguments{
-\item{hostname}{The API hostname.}
+\item{hostname}{The API url}
 
 \item{cookie_token}{The cookie token.}
 

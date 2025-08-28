@@ -24,7 +24,7 @@ install.packages("viafoundry")
 # Install devtools if not already installed
 install.packages("devtools")
 
-# Install the viafoundry package
+# Install the `viafoundry` package
 devtools::install_github("viascientific/viafoundry-R-SDK")
 ```
 
@@ -171,7 +171,7 @@ loadFile(report, "DE_module_RSEM", "control_vs_exper_des.Rmd")
 ### Uploading files to the reports section in Foundry
 
 You can first get the available directories in report and upload the files to those directories. After 
-creating new plots(e.g png, pdf) or would like to upload some analysis code to organize the data within the 
+creating new plots(e.g `png`, `pdf`) or would like to upload some analysis code to organize the data within the 
 report section you can use this method.
 
 ```R
@@ -326,7 +326,7 @@ print(response)
 
 ### Save and Upload Session History
 
-The ViaFoundry SDK for R allows you to save your session history while working in R. This is particularly useful for maintaining reproducibility and tracking the commands you execute.
+The `ViaFoundry SDK` for R allows you to save your session history while working in R. This is particularly useful for maintaining reproducibility and tracking the commands you execute.
 
 ### Saving Session History
 To save your session history to a file with a timestamp, you can use the `prepareSessionHistory` function:
@@ -360,5 +360,5 @@ This functionality ensures that your session history is automatically saved and 
   -	Ensure the endpoint exists and you have the necessary permissions.
   -	Check the API documentation for the correct method and parameters.
 3.	Server Returns HTML Instead of JSON:
-  -	Ensure the Accept: application/json header is sent with requests. This is handled automatically by the package.
+  -	Ensure the Accept: `application/json` header is sent with requests. This is handled automatically by the package.
 4. If you want to re-authenticate remove the `viaenv` file (e.g `~/.viaenv`) 

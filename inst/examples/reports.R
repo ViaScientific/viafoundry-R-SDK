@@ -3,6 +3,7 @@ library(viafoundry)
 # Step 1: Authenticate
 #authenticate(config_path="/Users/alper/.viaprod")
 authenticate()
+authenticate(config_path="/Users/alper/.vialocal")
 
 endpoints <- discover()
 print("Available endpoints:")
@@ -12,7 +13,7 @@ print(endpoints)
 a <- call_endpoint("GET", "/api/v1/process")
 
 a <- call_endpoint("GET", "/api/project/v1/2/runs")
-#reportID <- 2523
+reportID <- 1027
 reportID <- 1
 
 # Fetch the report 
@@ -23,7 +24,7 @@ getProcessNames(report)
 
 # Select the file from a process or a module 
 getFileNames(report, "RSEM_module")
-
+getAllFileNames(report)
 # Load a specific file
 rsem_data <- loadFile(report, "RSEM_module", "genes_expression_expected_count.tsv")
 dat <- data.frame(rsem_data)

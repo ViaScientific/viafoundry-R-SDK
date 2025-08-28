@@ -30,7 +30,7 @@ getProcessNames <- function(json_data) {
 #'
 #' @param json_data The `JSON` object containing the report data.
 #' @param processName The name of the process to filter by.
-#' @return A data frame containing `id`, `name`, `extension`, `fileSize`, and `routePath`.
+#' @return A data frame containing `id`, `name`, `extension`, `file size`, and `route path`.
 #' @importFrom dplyr select filter
 #' @export
 getFileNames <- function(json_data, processName) {
@@ -102,7 +102,7 @@ utils::globalVariables(c("id", "name", "extension", "fileSize", "routePath"))
 
 #' Recursively extract all files from deeply nested report JSON
 #'
-#' @param json_data The parsed report JSON returned from fetchReportData()
+#' @param json_data The parsed report JSON returned from fetch Report Data function 
 #' @return A data frame of all files and their metadata
 #' @importFrom dplyr bind_rows
 #' @export
@@ -249,10 +249,10 @@ getAllReportPaths <- function(report_id) {
   })
 }
 
-#' Get directories following "pubweb" in the routePath
+#' Get directories following pub web in the route path
 #'
 #' @param report_id The ID of the report.
-#' @return A character vector of unique directories found after "pubweb".
+#' @return A character vector of unique directories found after pub web.
 #' @importFrom stringr str_extract
 #' @export
 getReportDirs <- function(report_id) {
@@ -277,7 +277,7 @@ getReportDirs <- function(report_id) {
 
 #' Prepare Session History
 #'
-#' Saves the current R session history to a timestamped `.Rhistory` file.
+#' Saves the current R session history to a timestamped `R history` file.
 #' @importFrom utils savehistory
 #' @return The file path of the saved session history file.
 #' @examples

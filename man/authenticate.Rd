@@ -15,7 +15,7 @@ authenticate(
 )
 }
 \arguments{
-\item{hostname}{The API `hostname` (e.g., `https://your_viafoundry`).}
+\item{hostname}{The API url.}
 
 \item{username}{The login username.}
 
@@ -23,9 +23,9 @@ authenticate(
 
 \item{identity_type}{The identity type (default is 1).}
 
-\item{redirect_uri}{The redirect `URI` (default is `http://your_viafoundry/redirect`).}
+\item{redirect_uri}{The redirect `URI`.}
 
-\item{config_path}{Path to save the configuration file (default is `~/.viaenv`).}
+\item{config_path}{Path to save the configuration file.}
 
 \item{overwrite}{Logical flag to overwrite the existing configuration file (default is FALSE).}
 }
@@ -33,6 +33,6 @@ authenticate(
 None. Saves the bearer token to the configuration file and sets the global config path.
 }
 \description{
-Authenticates the user with the `Via Foundry` API using their username and password.
-Retrieves a bearer token and saves it along with the hostname to a configuration file.
+Authenticates the user with the `Via Foundry API` using their username and password.
+Retrieves a bearer token and saves it along with the `API url` to a configuration file.
 }

@@ -9,7 +9,7 @@ call_endpoint(method, endpoint, params = list(), data = NULL, files = NULL)
 \arguments{
 \item{method}{The HTTP method (e.g., "GET", "POST", "PUT", "DELETE").}
 
-\item{endpoint}{The API endpoint (e.g., `/api/projects`).}
+\item{endpoint}{The API endpoint.}
 
 \item{params}{A named list of query parameters (optional).}
 

@@ -12,7 +12,7 @@ getFileNames(json_data, processName)
 \item{processName}{The name of the process to filter by.}
 }
 \value{
-A data frame containing `id`, `name`, `extension`, `fileSize`, and `routePath`.
+A data frame containing `id`, `name`, `extension`, `file size`, and `route path`.
 }
 \description{
 Get file names for a specific process
