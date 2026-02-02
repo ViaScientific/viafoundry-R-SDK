@@ -19,7 +19,7 @@ DEFAULT_CONFIG_PATH <- "~/.viaenv"
 #' @param redirect_uri The redirect `URI`.
 #' @param config_path Path to save the configuration file.
 #' @param overwrite Logical flag to overwrite the existing configuration file (default is FALSE).
-#' @return Returns the configuration list containing hostname and bearer_token (invisibly for new auth, visibly when using existing config).
+#' @return Invisibly returns the configuration list containing hostname and bearer_token.
 #' @importFrom httr POST status_code content add_headers set_cookies
 #' @importFrom jsonlite fromJSON toJSON
 #' @importFrom askpass askpass
@@ -74,13 +74,13 @@ authenticate <- function(hostname = NULL, username = NULL, password = NULL, toke
           
           if (choice == "1") {
             message("Using existing configuration from ", .viaenv$config_path)
-            return(config)
+            return(invisible(config))
           }
           # If choice is "2", continue to prompt for new authentication
         } else {
           # Non-interactive call: use existing config
           message("Using existing configuration from ", .viaenv$config_path)
-          return(config)
+          return(invisible(config))
         }
       } else if (!is.null(config)) {
         message("Configuration file is incomplete. Re-authenticating...")
