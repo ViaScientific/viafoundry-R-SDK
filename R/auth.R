@@ -54,8 +54,7 @@ authenticate <- function(hostname = NULL, username = NULL, password = NULL, toke
   is_interactive_call <- is.null(hostname) && is.null(username) && is.null(password) && is.null(token)
   
   # Check if the configuration file exists and handle overwrite
-  # Skip existing config check if called interactively (always prompt for new auth)
-  if (file.exists(.viaenv$config_path) && !is_interactive_call) {
+  if (file.exists(.viaenv$config_path)) {
     if (!overwrite) {
       # Try to read existing config, handle corrupted files gracefully
       config <- tryCatch({
@@ -66,8 +65,23 @@ authenticate <- function(hostname = NULL, username = NULL, password = NULL, toke
       })
       
       if (!is.null(config) && !is.null(config$hostname) && !is.null(config$bearer_token)) {
-        message("Using existing configuration from ", .viaenv$config_path)
-        return(config)
+        if (is_interactive_call) {
+          # In interactive mode, ask user whether to use existing or create new
+          cat("\nExisting configuration found for: ", config$hostname, "\n")
+          cat("  1. Use existing configuration\n")
+          cat("  2. Create new configuration\n")
+          choice <- readline(prompt = "Enter choice (1 or 2): ")
+          
+          if (choice == "1") {
+            message("Using existing configuration from ", .viaenv$config_path)
+            return(config)
+          }
+          # If choice is "2", continue to prompt for new authentication
+        } else {
+          # Non-interactive call: use existing config
+          message("Using existing configuration from ", .viaenv$config_path)
+          return(config)
+        }
       } else if (!is.null(config)) {
         message("Configuration file is incomplete. Re-authenticating...")
       }
@@ -112,7 +126,18 @@ authenticate <- function(hostname = NULL, username = NULL, password = NULL, toke
     
     if (auth_choice == "1") {
       token <- readline(prompt = "Enter your personal access token: ")
-      return(authenticate(hostname = hostname, token = token, config_path = config_path, overwrite = TRUE))
+      # Validate token
+      if (is.null(token) || nchar(trimws(token)) == 0) {
+        stop("Token cannot be empty")
+      }
+      # Save the configuration with the provided token
+      config <- list(
+        hostname = hostname,
+        bearer_token = token
+      )
+      writeLines(toJSON(config, pretty = TRUE, auto_unbox = TRUE), con = .viaenv$config_path)
+      message("Authentication successful using token. Configuration saved to ", .viaenv$config_path)
+      return(invisible(config))
     } else {
       username <- readline(prompt = "Enter your username: ")
     }
