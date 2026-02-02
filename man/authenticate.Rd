@@ -33,7 +33,8 @@ authenticate(
 \item{overwrite}{Logical flag to overwrite the existing configuration file (default is FALSE).}
 }
 \value{
-None. Saves the bearer token to the configuration file and sets the global config path.
+A configuration list containing authentication settings (returned invisibly in most cases). Also
+saves the bearer token to the configuration file and sets the global config path.
 }
 \description{
 Authenticates the user with the `Via Foundry API` using either a personal access token
