@@ -3,7 +3,7 @@
 `viafoundry` is an R package for interacting with the Via Foundry API. It provides functions for user authentication, dynamic endpoint discovery, and executing API calls.
 
 ## Features
-- **Authentication**: Log in to the Via Foundry API using your credentials.
+- **Authentication**: Log in to the Via Foundry API using personal access tokens (recommended) or username/password.
 - **Dynamic API Discovery**: List all available API endpoints.
 - **Custom API Calls**: Send HTTP requests to any endpoint with parameters or payloads.
 
@@ -35,7 +35,46 @@ devtools::install_github("viascientific/viafoundry-R-SDK")
 Before interacting with the API, you need to authenticate and store your credentials. 
 Once authentication is done it will put token into `~/.viaenv` file, you don't need to re-authenticate.
 
-Use the authenticate() function:
+#### Interactive Mode
+
+Use the `authenticate()` function without arguments to be prompted for credentials interactively:
+
+```R
+library(viafoundry)
+authenticate()
+```
+
+This will prompt you to:
+1. Enter API hostname
+2. Choose authentication method:
+   - **Token** (recommended)
+   - **Username and Password**
+
+#### Using Token (Recommended)
+
+Configure with a personal access token for enhanced security:
+
+```R
+library(viafoundry)
+
+# Authenticate using token
+authenticate_token(
+    hostname = "https://your_foundry_server",
+    token = "your-personal-access-token"
+)
+
+# Or use authenticate() with token parameter
+authenticate(
+    hostname = "https://your_foundry_server",
+    token = "your-personal-access-token",
+    config_path = "~/.viaenv",
+    overwrite = TRUE
+)
+```
+
+#### Using Username/Password
+
+Alternatively, authenticate with username and password:
 
 ```R
 library(viafoundry)
@@ -48,12 +87,6 @@ authenticate(
     config_path = "~/.viaenv",
     overwrite = TRUE
 )
-```
-or use authenticate() function it will ask the information needed for authentication
-
-```R
-library(viafoundry)
-authenticate()
 ```
 
 ### Configuration File
@@ -106,7 +139,15 @@ print(response)
 
 library(viafoundry)
 
-# Step 1: Authenticate
+# Step 1: Authenticate (choose one method)
+
+# Option A: Using token (recommended)
+authenticate_token(
+    hostname = "https://your_foundry_server",
+    token = "your-personal-access-token"
+)
+
+# Option B: Interactive authentication
 authenticate()
 
 # Step 2: List all available endpoints
