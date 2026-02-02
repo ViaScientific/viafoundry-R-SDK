@@ -21,7 +21,7 @@ authenticate_token(
 \item{overwrite}{Logical flag to overwrite the existing configuration file (default is TRUE).}
 }
 \value{
-Invisibly returns the configuration list, after saving the token to the configuration file and setting the global config path.
+Invisibly returns the configuration list containing hostname and bearer_token.
 }
 \description{
 Configure authentication using a pre-generated personal access token.

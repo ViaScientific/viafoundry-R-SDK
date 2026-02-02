@@ -19,7 +19,7 @@ DEFAULT_CONFIG_PATH <- "~/.viaenv"
 #' @param redirect_uri The redirect `URI`.
 #' @param config_path Path to save the configuration file.
 #' @param overwrite Logical flag to overwrite the existing configuration file (default is FALSE).
-#' @return None. Saves the bearer token to the configuration file and sets the global config path.
+#' @return Returns the configuration list containing hostname and bearer_token (invisibly for new auth, visibly when using existing config).
 #' @importFrom httr POST status_code content add_headers set_cookies
 #' @importFrom jsonlite fromJSON toJSON
 #' @importFrom askpass askpass
@@ -185,7 +185,7 @@ authenticate <- function(hostname = NULL, username = NULL, password = NULL, toke
 #' @param token Personal access token.
 #' @param config_path Path to save the configuration file.
 #' @param overwrite Logical flag to overwrite the existing configuration file (default is TRUE).
-#' @return None. Saves the token to the configuration file and sets the global config path.
+#' @return Invisibly returns the configuration list containing hostname and bearer_token.
 #' @importFrom jsonlite toJSON
 #' @export
 #' @examples
