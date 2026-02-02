@@ -85,14 +85,14 @@ authenticate <- function(hostname = NULL, username = NULL, password = NULL, toke
     }
   }
   
-  # If token is provided, delegate to authenticate_token()
-  if (!is.null(token)) {
-    return(authenticate_token(hostname = hostname, token = token, config_path = config_path, overwrite = TRUE))
-  }
-  
   # Prompt for hostname if not provided
   if (is.null(hostname)) {
     hostname <- readline(prompt = "Enter the API hostname (e.g., https://viafoundry.com): ")
+  }
+  
+  # If token is provided, delegate to authenticate_token()
+  if (!is.null(token)) {
+    return(authenticate_token(hostname = hostname, token = token, config_path = config_path, overwrite = TRUE))
   }
   
   # If username not provided, offer choice between token and username/password
