@@ -21,7 +21,7 @@ authenticate_token(
 \item{overwrite}{Logical flag to overwrite the existing configuration file (default is TRUE).}
 }
 \value{
-None. Saves the token to the configuration file and sets the global config path.
+Invisibly returns the configuration list, after saving the token to the configuration file and setting the global config path.
 }
 \description{
 Configure authentication using a pre-generated personal access token.
