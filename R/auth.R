@@ -85,25 +85,9 @@ authenticate <- function(hostname = NULL, username = NULL, password = NULL, toke
     }
   }
   
-  # If token is provided, use token authentication directly
+  # If token is provided, delegate to authenticate_token()
   if (!is.null(token)) {
-    # Validate hostname
-    if (is.null(hostname) || nchar(trimws(hostname)) == 0) {
-      stop("Hostname cannot be empty")
-    }
-    # Validate token
-    if (nchar(trimws(token)) == 0) {
-      stop("Token cannot be empty")
-    }
-    
-    # Save the configuration with the provided token
-    config <- list(
-      hostname = hostname,
-      bearer_token = token
-    )
-    writeLines(toJSON(config, pretty = TRUE, auto_unbox = TRUE), con = .viaenv$config_path)
-    message("Authentication successful using token. Configuration saved to ", .viaenv$config_path)
-    return(invisible(config))
+    return(authenticate_token(hostname = hostname, token = token, config_path = config_path, overwrite = TRUE))
   }
   
   # Prompt for hostname if not provided
@@ -121,18 +105,7 @@ authenticate <- function(hostname = NULL, username = NULL, password = NULL, toke
     
     if (auth_choice == "1") {
       token <- readline(prompt = "Enter your personal access token: ")
-      # Validate token
-      if (is.null(token) || nchar(trimws(token)) == 0) {
-        stop("Token cannot be empty")
-      }
-      # Save the configuration with the provided token
-      config <- list(
-        hostname = hostname,
-        bearer_token = token
-      )
-      writeLines(toJSON(config, pretty = TRUE, auto_unbox = TRUE), con = .viaenv$config_path)
-      message("Authentication successful using token. Configuration saved to ", .viaenv$config_path)
-      return(invisible(config))
+      return(authenticate_token(hostname = hostname, token = token, config_path = config_path, overwrite = TRUE))
     } else {
       username <- readline(prompt = "Enter your username: ")
     }
