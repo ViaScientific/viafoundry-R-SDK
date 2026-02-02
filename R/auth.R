@@ -104,7 +104,7 @@ authenticate <- function(hostname = NULL, username = NULL, password = NULL, toke
     auth_choice <- readline(prompt = "Enter choice (1 or 2): ")
     
     if (auth_choice == "1") {
-      token <- readline(prompt = "Enter your personal access token: ")
+      token <- askpass("Enter your personal access token: ")
       return(authenticate_token(hostname = hostname, token = token, config_path = config_path, overwrite = TRUE))
     } else {
       username <- readline(prompt = "Enter your username: ")
