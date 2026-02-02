@@ -92,7 +92,7 @@ authenticate <- function(hostname = NULL, username = NULL, password = NULL, toke
   
   # If token is provided, delegate to authenticate_token()
   if (!is.null(token)) {
-    return(authenticate_token(hostname = hostname, token = token, config_path = config_path, overwrite = TRUE))
+    return(authenticate_token(hostname = hostname, token = token, config_path = config_path, overwrite = overwrite))
   }
   
   # If username not provided, offer choice between token and username/password
