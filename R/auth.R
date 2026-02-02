@@ -11,7 +11,7 @@ DEFAULT_CONFIG_PATH <- "~/.viaenv"
 #' or username and password. Retrieves a bearer token and saves it along with the `API url` 
 #' to a configuration file.
 #'
-#' @param hostname The API url.
+#' @param hostname The API URL (optional in interactive mode; will prompt if not provided).
 #' @param username The login username (optional; used with password authentication).
 #' @param password The login password (optional; will prompt if not provided).
 #' @param token Personal access token (optional; recommended for security).
