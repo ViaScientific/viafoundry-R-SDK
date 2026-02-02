@@ -16,7 +16,7 @@ authenticate(
 )
 }
 \arguments{
-\item{hostname}{The API url.}
+\item{hostname}{The API URL (optional in interactive mode; will prompt if not provided).}
 
 \item{username}{The login username (optional; used with password authentication).}
 
