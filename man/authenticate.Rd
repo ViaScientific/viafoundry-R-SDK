@@ -5,9 +5,10 @@
 \title{Authenticate with the `Via Foundry` API}
 \usage{
 authenticate(
-  hostname,
+  hostname = NULL,
   username = NULL,
   password = NULL,
+  token = NULL,
   identity_type = 1,
   redirect_uri = "http://localhost",
   config_path = DEFAULT_CONFIG_PATH,
@@ -17,9 +18,11 @@ authenticate(
 \arguments{
 \item{hostname}{The API url.}
 
-\item{username}{The login username.}
+\item{username}{The login username (optional; used with password authentication).}
 
 \item{password}{The login password (optional; will prompt if not provided).}
+
+\item{token}{Personal access token (optional; recommended for security).}
 
 \item{identity_type}{The identity type (default is 1).}
 
@@ -33,6 +36,27 @@ authenticate(
 None. Saves the bearer token to the configuration file and sets the global config path.
 }
 \description{
-Authenticates the user with the `Via Foundry API` using their username and password.
-Retrieves a bearer token and saves it along with the `API url` to a configuration file.
+Authenticates the user with the `Via Foundry API` using either a personal access token
+or username and password. Retrieves a bearer token and saves it along with the `API url` 
+to a configuration file.
+}
+\examples{
+\dontrun{
+# Using token authentication (recommended)
+authenticate(
+    hostname = "https://your_foundry_server",
+    token = "your-personal-access-token",
+    config_path = "~/.viaenv",
+    overwrite = TRUE
+)
+
+# Using username/password authentication
+authenticate(
+    hostname = "https://your_foundry_server",
+    username = "username",
+    password = "password",
+    config_path = "~/.viaenv",
+    overwrite = TRUE
+)
+}
 }

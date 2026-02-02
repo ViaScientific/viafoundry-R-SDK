@@ -2,6 +2,7 @@
 
 export(addFilesToDataset)
 export(authenticate)
+export(authenticate_token)
 export(call_endpoint)
 export(checkProcessUsage)
 export(createCanvas)
